@@ -187,9 +187,9 @@ services:
     networks:
       - apinetwork
     expose:
-      - "5000"
+      - "8080"
     ports:
-      - "5000:5000"
+      - "80:8080"
 
   nginx:
     container_name: nginx
