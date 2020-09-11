@@ -1,6 +1,7 @@
 # Configurate machine
 
 ## Step 1: Install components for the server
+
 ```
 # update system packages and install the required packages
 sudo apt-get update
@@ -25,6 +26,7 @@ git clone git@github.com:sergiobemar/tfg-sb-meal-delivery-prediction-api.git
 ```
 
 ## Step 3: Activate Python virtual environment
+
 ```
 cd tfg-sb-meal-delivery-prediction-api/
 
@@ -32,6 +34,7 @@ python3 -m venv env
 
 source env/bin/activate
 ```
+
 ## Step 4: Install libraries for the first time
 
 ```
@@ -146,7 +149,30 @@ RUN rm /etc/nginx/nginx.conf
 COPY nginx.conf /etc/nginx/
 ```
 
-## Step 9: Install Docker Compose
+# Step 9: Install Docker
+
+To install Docker it's possible following [this tutorial](https://www.digitalocean.com/community/tutorials/como-instalar-y-usar-docker-en-ubuntu-18-04-1-es):
+```
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+sudo apt update
+
+apt-cache policy docker-ce
+sudo apt install docker-ce
+
+sudo systemctl status docker
+```
+
+```
+sudo usermod -aG docker ${USER}
+su - ${USER}
+
+id -nG
+```
+
+## Step 10: Install Docker Compose
 
 It's used [docker docs web](https://docs.docker.com/compose/install/) to follow the installation steps.
 
@@ -161,7 +187,7 @@ sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 ```
 
-## Step 10: Configure Docker Compose file
+## Step 11: Configure Docker Compose file
 
 ```
 tfg-sb-meal-delivery-prediction-api
