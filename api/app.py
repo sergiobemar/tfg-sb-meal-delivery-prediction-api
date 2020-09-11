@@ -13,15 +13,15 @@ from flask import request
 
 #os.chdir('/home/jupyter/tfg-sb-meal-delivery-prediction/')
 
-from src.data.data_collect import read_test_data, read_train_data
-from src.model.xgboost_model import get_predictions, preprocess_data, train_xgboost_model
+from api.src.data.data_collect import read_test_data, read_train_data
+from api.src.model.xgboost_model import get_predictions, preprocess_data, train_xgboost_model
 
 # Read datasets
 df_test = read_test_data()
 df_train = read_train_data()
 
 # Load model
-regressor_model = joblib.load('./models/xgboost_model.pkl')
+regressor_model = joblib.load('./api/models/xgboost_model.pkl')
 # features = joblib.load('./models/xgboost_features.pkl')
 
 app = Flask(__name__)
@@ -47,8 +47,8 @@ def get():
 def predict():
 	
 	# Load model
-	regressor_model = joblib.load('./models/xgboost_model.pkl')
-	features = joblib.load('./models/xgboost_features.pkl')
+	regressor_model = joblib.load('./api/models/xgboost_model.pkl')
+	features = joblib.load('./api/models/xgboost_features.pkl')
 
 	# Get content from POST request
 	content = request.json
@@ -99,7 +99,7 @@ def predict():
 def predict2():
 	
 	# Load model
-	regressor_model = joblib.load('./models/xgboost_model.pkl')
+	regressor_model = joblib.load('./api/models/xgboost_model.pkl')
 # 	features = joblib.load('./models/xgboost_features.pkl')
 
 	# Get center and meal from the request
@@ -155,7 +155,7 @@ def predict2():
 @app.route('/save', methods=['GET'])
 def save_model():
 	
-	joblib.dump(regressor_model, './models/xgboost_model.pkl')
+	joblib.dump(regressor_model, './api/models/xgboost_model.pkl')
 # 	joblib.dump(features, './models/xgboost_features.pkl')
 	
 	return {'response': 'Model saved done!'}
@@ -186,7 +186,7 @@ def train():
 # 	features = list(df_preprocessed[select_cols].drop(columns='num_orders').columns)
 	
 	# Save the model and features
-	joblib.dump(regressor_model, './models/xgboost_model.pkl')
+	joblib.dump(regressor_model, './api/models/xgboost_model.pkl')
 # 	joblib.dump(features, './models/xgboost_features.pkl')
 	
 	# Return dict results
@@ -201,6 +201,7 @@ def train():
 	return jsonify(result)
 
 if __name__ == '__main__':
-	
+	import argparse
+
 	# Run server
 	app.run(debug=True, host='0.0.0.0', port=5000)
