@@ -11,7 +11,7 @@ from flask import jsonify
 from flask import request
 # from flask_restful import Api, Resource
 
-os.chdir('/home/jupyter/tfg-sb-meal-delivery-prediction/')
+#os.chdir('/home/jupyter/tfg-sb-meal-delivery-prediction/')
 
 from src.data.data_collect import read_test_data, read_train_data
 from src.model.xgboost_model import get_predictions, preprocess_data, train_xgboost_model
