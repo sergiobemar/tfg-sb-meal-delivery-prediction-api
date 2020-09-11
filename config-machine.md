@@ -8,7 +8,7 @@ sudo apt-get install bzip2 libxml2-dev libsm6 libxrender1 libfontconfig1
 sudo apt-get install python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools
 sudo apt install python3-venv
 ```
-# Step 2. Set SSH keys in GitHub and clone repository
+## Step 2. Set SSH keys in GitHub and clone repository
 
 ```
 ssh-keygen -t rsa -b 4096 -C "youremail@email.com"
@@ -17,6 +17,9 @@ cat .ssh/id_rsa.pub
 ```
 
 ```
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+
 # clone the project repo
 git clone git@github.com:sergiobemar/tfg-sb-meal-delivery-prediction-api.git
 ```
@@ -29,7 +32,7 @@ python3 -m venv env
 
 source env/bin/activate
 ```
-# Step 4: Install libraries for the first time
+## Step 4: Install libraries for the first time
 
 ```
 pip install cmake wheel
