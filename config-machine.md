@@ -8,7 +8,7 @@ sudo apt-get install bzip2 libxml2-dev libsm6 libxrender1 libfontconfig1
 sudo apt-get install python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools
 sudo apt install python3-venv
 ```
-## Step 2. Set SSH keys in GitHub and clone repository
+## Step 2: Set SSH keys in GitHub and clone repository
 
 ```
 ssh-keygen -t rsa -b 4096 -C "youremail@email.com"
@@ -42,35 +42,151 @@ pip install joblib numpy pandas xgboost
 
 ```
 
+## Step 5: Test the API
 
 ```
-sudo apt-get install python3-pip
+python serve_model.py
+```
 
-# download and install miniconda
-wget https://repo.anaconda.com/miniconda/Miniconda3-4.7.10-Linux-x86_64.sh
-bash Miniconda3-4.7.10-Linux-x86_64.sh
+## Step 6: Configure Gunicorn
+
+In order to keep cleaned and sorted the repository, it's changed the structure saving everything created before, all regarding to model and preprocessing scripts besides the Flask source, in a subfolder named as api.
+
+Create a file named ```wsgi.py``` and added the following lines:
+```
+src api/
+nano wsgi.py
+```
+
+*wsgi<span></span>.py*:
+```
+from app import app
+if __name__ == "__main__":
+    app.run(use_reloader=True, debug=True
 ```
 
 ```
-export PATH=/home/<your name here>/miniconda3/bin:$PATH
-rm Miniconda3-4.7.10-Linux-x86_64.sh
-
-# confirm installation
-which conda
-
-# create and activate a new environment
-conda create -n flask-tutorial python=3.7
-conda activate flask-tutorial
+gunicorn -w 3 --bind 0.0.0.0:5000 -t 30 --r
+eload wsgi:app
 ```
 
+## Step 7: Setting up the API in Docker
 
+Create an empty ```__init__.py``` in ```api/``` and create ```requirements.txt```.
 
+```
+touch __init__.py
+pip freeze > requirements.txt
+```
 
+And then, it's created ```Dockerfile``` with the following code:
 
+```
+FROM python:3.6
 
+#update
+RUN apt-get update
 
+#install requirements
+COPY ./requirements.txt /tmp/requirements.txt
+WORKDIR /tmp
+RUN pip3 install -r requirements.txt
 
+#copy app
+COPY . /api
+WORKDIR /
 
+CMD ["gunicorn", "-w", "3", "-bind", "0.0.0.0:5000", "-t", "360", "--reload", "api.wsgi:app"]
+```
 
+# Step 8: Add the Nginx container
 
+```
+tfg-sb-meal-delivery-prediction-api
+|- api
+   ...
+|- nginx
+	|- nginx.conf
+	|- Dockerfile
+```
 
+Added the following files ```nginx.conf``` and its ```Dockerfile```. Let's see the code for the first one:
+
+```
+worker_processes  3;
+
+events { }
+
+http {
+
+  keepalive_timeout  360s;
+
+  server {
+
+      listen 8080;
+      server_name api;
+      charset utf-8;
+
+      location / {
+          proxy_pass http://api:5000;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      }
+  }
+}
+```
+
+And the ```Dockerfile``` for the nginx:
+
+```
+FROM nginx:1.15.2
+
+RUN rm /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/
+```
+
+## Step 9: Configure Docker Compose
+
+```
+tfg-sb-meal-delivery-prediction-api
+|- api
+   ...
+|- nginx
+   ...
+|- docker-compose.yml
+```
+
+The code:
+
+```
+version: '3'
+
+services:
+
+  api:
+    container_name: flask_api
+    restart: always
+    build: ./api
+    volumes: ['./api:/api']
+    networks:
+      - apinetwork
+    expose:
+      - "5000"
+    ports:
+      - "5000:5000"
+
+  nginx:
+    container_name: nginx
+    restart: always
+    build: ./nginx
+    networks:
+      - apinetwork
+    expose:
+      - "8787"
+    ports:
+      - "8787:8787"
+
+networks:
+  apinetwork:
+```
