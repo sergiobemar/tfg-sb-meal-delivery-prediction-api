@@ -1,0 +1,128 @@
+{
+	"file" : [
+		{
+			"name" : "fulfilment_center_info.csv",
+			"description" : "Contains information for each fulfillment center",
+			"columns" : [
+				{
+					"name" : "center_id",
+					"description" : "Unique ID for fulfillment center"
+				},
+				{
+					"name" : "city_code",
+					"description" : "Unique code for city"
+				},
+				{
+					"name" : "region_code",
+					"description" : "Unique code for region"
+				},
+				{
+					"name" : "center_type",
+					"description" : "Anonymized center type"
+				},
+				{
+					"name" : "op_area",
+					"description" : "Area of operation (in km^2)"
+				}
+			]
+		},
+		{
+			"name" : "meal_info.csv",
+			"description" : "Contains information for each meal being served",
+			"columns" : [
+				{
+					"name" : "meal_id",
+					"description" : "Unique ID for the meal"
+				},
+				{
+					"name" : "category",
+					"description" : "Type of meal (beverages/snacks/soup/...)"
+				},
+				{
+					"name" : "cuisine",
+					"description" : "Meal cuisine (Indian/Italian/…)"
+				}
+			]
+		},
+		{
+			"name" : "test.csv",
+			"description" : "Data for testing the model. Similar structure as train.csv with the target variable",
+			"columns" : [
+				{
+					"name" : "id",
+					"description" : "Unique ID"
+				},
+				{
+					"name" : "week",
+					"description" : "Week No"
+				},
+				{
+					"name" : "center_id",
+					"description" : "Unique ID for fulfillment center"
+				},
+				{
+					"name" : "meal_id",
+					"description" : "Unique ID for Meal"
+				},
+				{
+					"name" : "checkout_price",
+					"description" : "Final price including discount, taxes & delivery charges"
+				},
+				{
+					"name" : "base_price",
+					"description" : "Base price of the meal"
+				},
+				{
+					"name" : "emailer_for_promotion",
+					"description" : "Emailer sent for promotion of meal"
+				},
+				{
+					"name" : "homepage_featured",
+					"description" : "Meal featured at homepage"
+				}
+			]
+		},
+		{
+			"name" : "train.csv",
+			"description" : "Contains the historical demand data for all centers, test.csv contains all the following features except the target variable",
+			"columns" : [
+				{
+					"name" : "id",
+					"description" : "Unique ID"
+				},
+				{
+					"name" : "week",
+					"description" : "Week No"
+				},
+				{
+					"name" : "center_id",
+					"description" : "Unique ID for fulfillment center"
+				},
+				{
+					"name" : "meal_id",
+					"description" : "Unique ID for Meal"
+				},
+				{
+					"name" : "checkout_price",
+					"description" : "Final price including discount, taxes & delivery charges"
+				},
+				{
+					"name" : "base_price",
+					"description" : "Base price of the meal"
+				},
+				{
+					"name" : "emailer_for_promotion",
+					"description" : "Emailer sent for promotion of meal"
+				},
+				{
+					"name" : "homepage_featured",
+					"description" : "Meal featured at homepage"
+				},
+				{
+					"name" : "num_orders",
+					"description" : "Orders Count (Target)"
+				}
+			]
+		}
+	]
+}

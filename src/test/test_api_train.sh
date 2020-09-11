@@ -1,0 +1,1 @@
+curl -X POST -H "Content-Type: application/json" -d '{"center_id": 55, "meal_id": 1993}' http://localhost:5000/train
