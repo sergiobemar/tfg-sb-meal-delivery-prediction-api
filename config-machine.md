@@ -146,7 +146,22 @@ RUN rm /etc/nginx/nginx.conf
 COPY nginx.conf /etc/nginx/
 ```
 
-## Step 9: Configure Docker Compose
+## Step 9: Install Docker Compose
+
+It's used [docker docs web](https://docs.docker.com/compose/install/) to follow the installation steps.
+
+```
+# Get the current stable release of Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.27.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+# Add execution permissions to the binary
+sudo chmod +x /usr/local/bin/docker-compose
+
+# Check the version in order to test the installation
+docker-compose --version
+```
+
+## Step 10: Configure Docker Compose file
 
 ```
 tfg-sb-meal-delivery-prediction-api
@@ -190,3 +205,4 @@ services:
 networks:
   apinetwork:
 ```
+
