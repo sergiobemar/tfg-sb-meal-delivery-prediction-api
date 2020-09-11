@@ -21,9 +21,9 @@ services:
     networks:
       - apinetwork
     expose:
-      - "8787"
+      - "8080"
     ports:
-      - "8787:8787"
+      - "80:8080"
 
 networks:
   apinetwork:
