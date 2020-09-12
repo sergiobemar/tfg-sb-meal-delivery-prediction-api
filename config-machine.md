@@ -2,10 +2,12 @@
 
 ## Step 1: Install components for the server
 
+For this server it's used a Ubuntu machine v18.04 LTS with 2 CPUs and 4 GB of memory, besides its estimated cost is $27,31 in europe-west1 region, if machine was always on.
+
 ```
 # update system packages and install the required packages
 sudo apt-get update
-sudo apt-get install bzip2 libxml2-dev libsm6 libxrender1 libfontconfig1
+sudo apt-get install bzip2 libxml2-dev libsm6 libxrender1 libfontconfig1 git
 sudo apt-get install python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools
 sudo apt install python3-venv
 ```
@@ -152,6 +154,7 @@ COPY nginx.conf /etc/nginx/
 # Step 9: Install Docker
 
 To install Docker it's possible following [this tutorial](https://www.digitalocean.com/community/tutorials/como-instalar-y-usar-docker-en-ubuntu-18-04-1-es):
+
 ```
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
 
@@ -164,6 +167,8 @@ sudo apt install docker-ce
 
 sudo systemctl status docker
 ```
+
+Then, current user is added to *docker* group.
 
 ```
 sudo usermod -aG docker ${USER}
