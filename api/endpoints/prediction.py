@@ -5,8 +5,8 @@ import os
 import pandas as pd
 import sys
 
-from datetime import timedelta  
-from flask import Flask
+from datetime import timedelta
+from flask import Blueprint
 from flask import jsonify
 from flask import request
 # from flask_restful import Api, Resource
@@ -27,7 +27,7 @@ df_train = read_train_data()
 regressor_model = joblib.load('./api/models/xgboost_model.pkl')
 # features = joblib.load('./models/xgboost_features.pkl')
 
-app = Flask(__name__)
+# app = Flask(__name__)
 # api = Api(app)
 
 # class Test(Resource):
