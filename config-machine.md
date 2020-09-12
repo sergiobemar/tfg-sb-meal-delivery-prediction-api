@@ -232,3 +232,20 @@ networks:
   apinetwork:
 ```
 
+## Step 12: Test docker-compose
+
+It's the end of the configuration, if the last steps are ok, you can try to build the docker file using *docker-compose* which creates an image of the two containers, one for nginx and the other for gunicorn. When launch the command ```docker-compose up```, these containers will be up and you can try now to make some request to the API.
+
+
+```
+docker-compose build
+
+docker-compose up
+```
+
+If you want to re-build the API, you only have to remove the old image and build the another newer, for this you only have to remove the created containers.
+
+```
+docker ps
+docker-compose rm [IMAGE]
+```
