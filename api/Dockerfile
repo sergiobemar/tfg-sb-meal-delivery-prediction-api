@@ -12,4 +12,4 @@ RUN pip3 install -r requirements.txt
 COPY . /api
 WORKDIR /
 
-CMD ["gunicorn", "-w", "3", "-bind", "0.0.0.0:5000", "-t", "360", "--reload", "api.wsgi:app"]
+CMD ["gunicorn", "-w", "3", "-b", ":5000", "-t", "360", "--reload", "api.wsgi:app"]
