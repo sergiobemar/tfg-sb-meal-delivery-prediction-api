@@ -254,3 +254,8 @@ If you want to re-build the API, you only have to remove the old image and build
 docker ps
 docker-compose rm [IMAGE]
 ```
+However, if you want to stop the Docker containers without being deleted, you only have to run this command from the main path:
+
+```
+docker-compose down
+```

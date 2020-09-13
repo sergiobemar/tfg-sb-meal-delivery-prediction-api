@@ -37,9 +37,32 @@ This API send the response from the requests sent by the[ ShinyApp deployed for 
     └── nginx.conf			- Configure the web server
 ```
 
-
+Generated using the following command ```tree . -I 'env'```
 
 ## How to run
+
+To run this API server now you can try to build the docker file using *docker-compose* which creates an image of the two containers, one for nginx and the other for gunicorn. When launch the command ```docker-compose up```, these containers will be up and you can try now to make some request to the API.
+
+For a detailed information [you can visit this guide](https://github.com/sergiobemar/tfg-sb-meal-delivery-prediction-api/blob/master/config-machine.md) created in order to orient the developer in the deployment.
+
+```
+docker-compose build
+
+docker-compose up
+```
+
+If you want to re-build the API, you only have to remove the old image and build the another newer, for this you only have to remove the created containers.
+
+```
+docker ps
+docker-compose rm [IMAGE]
+```
+
+However, if you want to stop the Docker containers without being deleted, you only have to run this command from the main path:
+
+```
+docker-compose down
+```
 
 # Useful links
 + A production-grade Machine Learning API using Flask, Gunicorn, Nginx, and Docker
