@@ -1,4 +1,4 @@
-# Configurate machine
+# Config REST API machine
 
 ## Step 1: Install components for the server
 
@@ -67,12 +67,12 @@ nano wsgi.py
 ```
 from app import app
 if __name__ == "__main__":
-    app.run(use_reloader=True, debug=True
+    app.run(use_reloader=True, debug=True)
 ```
 
+Let's run *Gunicorn*
 ```
-gunicorn -w 3 --bind 0.0.0.0:5000 -t 30 --r
-eload wsgi:app
+gunicorn -w 3 --bind 0.0.0.0:5000 -t 30 --reload wsgi:app
 ```
 
 ## Step 7: Setting up the API in Docker
