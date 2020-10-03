@@ -172,8 +172,17 @@ Then, current user is added to *docker* group.
 
 ```
 sudo usermod -aG docker ${USER}
-su - ${USER}
+```
 
+Now, you have to close the session on the server, so you can restart it or write the following command:
+
+```
+su - ${USER}
+```
+
+After that, you can check that your user is in Docker group.
+
+```
 id -nG
 ```
 
