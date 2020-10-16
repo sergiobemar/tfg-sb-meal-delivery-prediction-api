@@ -104,7 +104,7 @@ WORKDIR /
 CMD ["gunicorn", "-w", "3", "-bind", "0.0.0.0:5000", "-t", "360", "--reload", "api.wsgi:app"]
 ```
 
-# Step 8: Add the Nginx container
+## Step 8: Add the Nginx container
 
 ```
 tfg-sb-meal-delivery-prediction-api
@@ -151,7 +151,7 @@ RUN rm /etc/nginx/nginx.conf
 COPY nginx.conf /etc/nginx/
 ```
 
-# Step 9: Install Docker
+## Step 9: Install Docker
 
 To install Docker it's possible following [this tutorial](https://www.digitalocean.com/community/tutorials/como-instalar-y-usar-docker-en-ubuntu-18-04-1-es):
 
