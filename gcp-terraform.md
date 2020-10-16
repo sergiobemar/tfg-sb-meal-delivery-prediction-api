@@ -42,7 +42,7 @@ Now, its the moment when it's going to create the config files of Terraform.
 
 ### Step 3.1. ```provider.tf```
 
-Create a file named as [```provider.tf```](provider.tf) which will contain the configuration needed for provisioning a resource on GCP.
+Create a file named as [```provider.tf```](examples/terraform/provider.tf) which will contain the configuration needed for provisioning a resource on GCP.
 
 ```
 # Specify the provider (GCP, AWS, Azure)
