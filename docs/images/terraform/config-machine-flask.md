@@ -40,10 +40,10 @@ source env/bin/activate
 ## Step 4: Install libraries for the first time
 
 ```
-pip install cmake wheel
-pip install gunicorn flask
+pip3 install cmake wheel
+pip3 install gunicorn flask
 
-pip install joblib numpy pandas xgboost
+pip3 install joblib numpy pandas xgboost
 
 ```
 
