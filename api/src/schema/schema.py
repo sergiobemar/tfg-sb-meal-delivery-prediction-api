@@ -1,4 +1,5 @@
-from pydantic import BaseModel, conint, constr, date
+from datetime import date
+from pydantic import BaseModel, conint, constr
 from typing import Optional
 
 class Week(BaseModel):
