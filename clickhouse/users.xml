@@ -44,6 +44,7 @@
 				</networks>	
 				<profile>default</profile>
 				<quota>default</quota>
+				<listen_host>0.0.0.0</listen_host>
 			</user1>
 			<!-- If user name was not specified, 'default' user is used. -->
         <default>
@@ -75,6 +76,7 @@
 
             <!-- Quota for user. -->
             <quota>default</quota>
+			<listen_host>0.0.0.0</listen_host>
         </default>
 
         <!-- Example of user with readonly access. -->
