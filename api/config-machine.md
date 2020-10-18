@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
 Let's run *Gunicorn*
 ```
-gunicorn -w 3 --bind 0.0.0.0:5000 -t 30 --reload wsgi:app
+gunicorn api.app:app --bind 0.0.0.0:5000 -w 4 -k uvicorn.workers.UvicornWorker
 ```
 
 After the API server is started, you can stop it and deactivate the virtual environment.
