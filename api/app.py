@@ -24,7 +24,7 @@ regressor_model = joblib.load('./api/models/xgboost_model.pkl')
 # features = joblib.load('./models/xgboost_features.pkl')
 
 @app.get('/predict')
-def predict(order : schema.Order):
+def predict(center_id : int, meal_id : int):
 	
 	# Load model
 	regressor_model = joblib.load('./api/models/xgboost_model.pkl')
@@ -33,8 +33,8 @@ def predict(order : schema.Order):
 	# Get center and meal from the request
 	# content = request.json
 	
-	center_id = order.center_id
-	meal_id = order.meal_id
+	#center_id = order.center_id
+	#meal_id = order.meal_id
 
 	print("CENTER: " + str(center_id))
 	print("MEAL: " + str(meal_id))
