@@ -1,7 +1,7 @@
 from pydantic import BaseModel, conint, constr
 from typing import Optional
 
-class Order(BaseModel):
+class Week(BaseModel):
 	week: int
 	center_id: int
 	meal_id: int
@@ -11,6 +11,7 @@ class Order(BaseModel):
 	homepage_featured: int
 	num_orders: Optional[int]
 
-class Prediction(BaseModel):
+class Order(BaseModel):
 	center_id: int
 	meal_id: int
+	num_orders: Optional[int]
