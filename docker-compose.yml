@@ -31,6 +31,9 @@ services:
     container_name: clickhouse
     ports:
       - 9001:9000
+    volumes:
+      - ./clickhouse/custom_config.xml:/etc/clickhouse-server/config.d/custom_config.xml
+      - ./clickhouse/users.xml:/etc/clickhouse-server/users.xml
     ulimits:
       nofile:
         soft: 262144
