@@ -24,6 +24,17 @@ services:
       - "8080"
     ports:
       - "80:8080"
+  
+  clickhouse:
+    image: yandex/clickhouse-server
+    hostname: clickhouse
+    container_name: clickhouse
+    ports:
+      - 9001:9000
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
 
 networks:
   apinetwork:
