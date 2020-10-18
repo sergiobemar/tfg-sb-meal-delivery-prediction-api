@@ -7,6 +7,7 @@ import sys
 
 from datetime import timedelta
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from typing import List
 
 #os.chdir('/home/jupyter/tfg-sb-meal-delivery-prediction/')
@@ -62,7 +63,7 @@ def predict(center_id : int, meal_id : int):
 	
 	print(result)
 	
-	return result
+	return JSONResponse(content=result)
 
 @app.get('/test')
 def test():
