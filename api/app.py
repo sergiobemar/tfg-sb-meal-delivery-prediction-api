@@ -23,7 +23,7 @@ df_train = read_train_data()
 regressor_model = joblib.load('./api/models/xgboost_model.pkl')
 # features = joblib.load('./models/xgboost_features.pkl')
 
-@app.get('/predict')
+@app.get('/predict', response_model = List[schema.Prediction])
 def predict(center_id : int, meal_id : int):
 	
 	# Load model

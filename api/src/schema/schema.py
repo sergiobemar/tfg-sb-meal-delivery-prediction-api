@@ -15,3 +15,7 @@ class Order(BaseModel):
 	center_id: int
 	meal_id: int
 	num_orders: Optional[int]
+
+class Prediction(BaseModel):
+	date : date
+	num_orders : int
