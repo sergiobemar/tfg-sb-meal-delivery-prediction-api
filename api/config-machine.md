@@ -47,39 +47,60 @@ pip3 install joblib numpy pandas xgboost
 
 ```
 
-## Step 5: Test the API
+## Step 5: Test the API with Uvicorn
+
+In order to test the API, you can run it in your local machine usign ```Uvicorn```.
 
 ```
-python serve_model.py
+uvicorn api.app:app --host 0.0.0.0 --port 5000 --reload --debug --workers 3
 ```
+
+The parameters used are the following:
+
++ ```api.app:app```: The ASGI application to run, in the format ```"<module>:<attribute>"```.
++ ```--host 0.0.0.0```: Make the API server available on the network.
++ ```--port 5000```: Bind to a socket with port 5000.
++ ```--reload```: Restart workers when code changes.
++ ```-workers 3```: Use multiple worker processes.
 
 ## Step 6: Configure Gunicorn
 
-In order to keep cleaned and sorted the repository, it's changed the structure saving everything created before, all regarding to model and preprocessing scripts besides the Flask source, in a subfolder named as api.
+In order to keep cleaned and sorted the repository, it's changed the structure saving everything created before, all regarding to model and preprocessing scripts besides the source, in a subfolder named as *api*.
 
-Create a file named ```wsgi.py``` and added the following lines:
-```
-src api/
-nano wsgi.py
-```
+For production server, it's neccessary use Gunicorn instead of Uvicorn and also, in order to keep the async functionality, launch it with this parameter ```gunicorn -k uvicorn.workers.UvicornWorker```.
 
-*wsgi<span></span>.py*:
-```
-from app import app
-if __name__ == "__main__":
-    app.run(use_reloader=True, debug=True)
-```
-
-Let's run *Gunicorn*
 ```
 gunicorn api.app:app --bind 0.0.0.0:5000 -w 4 -k uvicorn.workers.UvicornWorker
 ```
+
+The parameters used are the following:
+
++ ```--bind 0.0.0.0:5000```: Make the API server available on the network using de 5000 port.
++ ```-w 4```: Use multiple worker processes.
++ ```-k uvicorn.workers.UvicornWorker```: *Uvicorn* includes a gunicorn worker class that means you can get set up with very little configuration.
+
 
 After the API server is started, you can stop it and deactivate the virtual environment.
 
 ```
 (env) deactivate
 ```
+
+It's possible to run the script programmatically usign Uvicorn. Create a file ```example.py``` and added the following lines:
+
+```
+import uvicorn
+
+class App:
+    ...
+
+app = App()
+
+if __name__ == "__main__":
+	uvicorn.run("app:app", host='0.0.0.0', port=5000, reload=True, debug=True, workers=3)
+```
+
+For more info, you can see it in [Uvicorn website](https://www.uvicorn.org/deployment/#running-programmatically).
 
 ## Step 7: Setting up the API in Docker
 
@@ -96,7 +117,7 @@ And then, it's created ```Dockerfile``` with the following code:
 FROM python:3.6
 
 #update
-RUN apt-get update
+RUN apt-get update 
 
 #install requirements
 COPY ./requirements.txt /tmp/requirements.txt
@@ -107,7 +128,7 @@ RUN pip3 install -r requirements.txt
 COPY . /api
 WORKDIR /
 
-CMD ["gunicorn", "-w", "3", "-bind", "0.0.0.0:5000", "-t", "360", "--reload", "api.wsgi:app"]
+CMD ["gunicorn", "-w", "3", "-b", "0.0.0.0:5000", "-t", "360", "--reload", "api.app:app", "-k", "uvicorn.workers.UvicornWorker"]
 ```
 
 ## Step 8: Add the Nginx container
@@ -226,16 +247,16 @@ version: '3'
 services:
 
   api:
-    container_name: flask_api
+    container_name: apiserver
     restart: always
     build: ./api
     volumes: ['./api:/api']
     networks:
       - apinetwork
     expose:
-      - "8080"
+      - "5000"
     ports:
-      - "80:8080"
+      - "5000:5000"
 
   nginx:
     container_name: nginx
@@ -244,9 +265,9 @@ services:
     networks:
       - apinetwork
     expose:
-      - "8787"
+      - "8080"
     ports:
-      - "8787:8787"
+      - "80:8080"
 
 networks:
   apinetwork:
@@ -274,3 +295,23 @@ However, if you want to stop the Docker containers without being deleted, you on
 ```
 docker-compose down
 ```
+
+# Useful links
++ A production-grade Machine Learning API using Flask, Gunicorn, Nginx, and Docker
+  + [Part 1: Setting up our API](https://medium.com/technonerds/a-production-grade-machine-learning-api-using-flask-gunicorn-nginx-and-docker-part-1-49927238befb)
+  + [Part 2: Integrating Gunicorn, Nginx and Docker](https://medium.com/technonerds/a-production-grade-machine-learning-api-using-flask-gunicorn-nginx-and-docker-part-2-c69629199037)
+  + [Part 3: Flask Blueprints — managing multiple endpoints](https://medium.com/technonerds/a-production-grade-machine-learning-api-using-flask-gunicorn-nginx-and-docker-part-3-flask-30c881a65655)
+  + [Part 4: Testing your ML API](https://medium.com/technonerds/a-production-grade-machine-learning-api-using-flask-gunicorn-nginx-and-docker-part-4-unit-c31a92544fd6)
++ [Build a FastAPI Server](https://python-gino.org/docs/en/master/tutorials/fastapi.html)
++ [Building machine learning models with Keras, FastAPI, Redis and Docker](https://morioh.com/p/4e37a3a1ab3d)
++ [Cómo instalar y usar Docker en Ubuntu 18.04](https://www.digitalocean.com/community/tutorials/como-instalar-y-usar-docker-en-ubuntu-18-04-1-es)
++ [Cómo preparar aplicaciones de Flask con Gunicorn y Nginx en Ubuntu 18.04](https://www.digitalocean.com/community/tutorials/como-preparar-aplicaciones-de-flask-con-gunicorn-y-nginx-en-ubuntu-18-04-es)
++ [Deploying a FastAPI app with Docker, Traefik, and Let's Encrypt](https://www.valentinog.com/blog/traefik/)
++ [Deploying an ML Model on Google Compute Engine](https://towardsdatascience.com/deploying-a-custom-ml-prediction-service-on-google-cloud-ae3be7e6d38f)
++ [FastAPI - Tutorial - User Guide - Intro](https://fastapi.tiangolo.com/tutorial/)
++ [How to deploy a Python API with FastAPI with Nginx and Docker](https://medium.com/@nuno.m.bispo/how-to-deploy-a-python-api-with-fastapi-with-nginx-and-docker-1328cbf41bc)
++ [Install Docker Compose](https://docs.docker.com/compose/install/)
++ [Is there a difference between running fastapi from uvicorn command in dockerfile and from pythonfile?](https://stackoverflow.com/questions/63177681/is-there-a-difference-between-running-fastapi-from-uvicorn-command-in-dockerfile)
++ [Use FastAPI to build web services in Python](https://fedoramagazine.org/use-fastapi-to-build-web-services-in-python/)
++ [Uvicorn - Deployment](https://www.uvicorn.org/deployment/#running-programmatically)
++ [Where Are Docker Container Logs Stored?](https://sematext.com/blog/docker-logs-location/#:~:text=First%20of%20all%2C%20to%20list,use%20the%20docker%20ps%20command.&text=Then%2C%20with%20the%20docker%20logs,logs%20for%20a%20particular%20container.&text=Most%20of%20the%20time%20you,the%20last%20few%20logs%20lines.)
