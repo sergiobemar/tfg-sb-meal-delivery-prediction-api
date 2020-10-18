@@ -26,6 +26,7 @@ regressor_model = joblib.load('./api/models/xgboost_model.pkl')
 @app.get('/test')
 def get():
 	return {
-		'message': 'test successful!!!!!'
+		'message': 'test successful!!!!!',
+		'test' : str(df_train.size)
 	}
 
