@@ -1,6 +1,15 @@
-# CREATE VM ENGINE MACHINE WITH TERRAFORM
+<h1>CREATE VM ENGINE MACHINE WITH TERRAFORM</h1>
 
-## Step 1. Downloading, installing and configuring Terraform
+- [1. Downloading, installing and configuring Terraform](#1-downloading-installing-and-configuring-terraform)
+- [2. Configure the Service Account on GCP](#2-configure-the-service-account-on-gcp)
+- [3. Configure Terraform files](#3-configure-terraform-files)
+	- [3.1. ```provider.tf```](#31-providertf)
+	- [3.2. ```instance.tf```](#32-instancetf)
+	- [3.3. Create startup script](#33-create-startup-script)
+- [4. Resources creation](#4-resources-creation)
+- [5. Useful links](#5-useful-links)
+
+##  1. Downloading, installing and configuring Terraform
 
 It's necessary to download the stable package of Terraform, then it's moved to ```/usr/local/bin```. Introduce the following commands into the Cloud Shell Terminal.
 
@@ -19,7 +28,7 @@ terraform version
 ```
 ![Step 1.2: Installing](docs/images/terraform/1.1-installed-terraform.png)
 
-## Step 2. Configure the Service Account on GCP
+##  2. Configure the Service Account on GCP
 
 In order to allow Terraform to create virtual machines, it has been created a service account which gives specific resources to a group or user.
 
@@ -37,10 +46,10 @@ Then, it's possible to create the JSON key, in this step is very important to co
 
 ![Step 2.3 Create json keys](docs/images/terraform/2.3-create-json-key.png)
 
-## Step 3. Configure Terraform files
+##  3. Configure Terraform files
 Now, its the moment when it's going to create the config files of Terraform.
 
-### Step 3.1. ```provider.tf```
+###  3.1. ```provider.tf```
 
 Create a file named as [```provider.tf```](examples/terraform/provider.tf) which will contain the configuration needed for provisioning a resource on GCP.
 
@@ -53,7 +62,7 @@ provider "google" {
 }
 ```
 
-### Step 3.2. ```instance.tf```
+###  3.2. ```instance.tf```
 
 This file contains the resource's configuration of each machine that user wants to create. It has several sections:
 + ```resource "google_compute_instance" "default"```: Describe the information about the virtual machine, such as type of image, network interface or even the initial script that will going to be executed when bootstrapping.
@@ -112,7 +121,7 @@ output "ip" {
 }
 ```
 
-### Step 3.3. Create startup script
+###  3.3. Create startup script
 
 In a file like [```start.sh```](start_terraform.sh) you can define the shell commands which you want to run inside compute engine after creation. It's not mandatory but it's very interesting for example when you have to re-create instance after being deleted.
 
@@ -150,7 +159,7 @@ But if you don't want to use the command and see the specific file, you can read
  + Ubuntu: ```/var/log/syslog```
  + SLES: ```/var/log/messages```
 
-## Step 4. Resources creation
+## 4. Resources creation
 
 After the creation the previous files, it's ready to run a set of *Terraform* commands for resource creation.
 
@@ -192,7 +201,7 @@ Now, you can go to your *VM Engine* console and you will see the instances which
 
 ![Created instance](docs/images/terraform/4-machine-created.png)
 
-## Useful links
+## 5. Useful links
 + [Create your first Compute Engine(VM) in GCP using Terraform](https://medium.com/hacker-soon/create-your-first-compute-engine-vm-in-gcp-using-terraform-3bc82f49b308)
 + [Ejecuta secuencias de comandos de inicio](https://cloud.google.com/compute/docs/startupscript#rerunthescript)
 + [HashiCorp Learn - Build Infraestructure](https://learn.hashicorp.com/tutorials/terraform/google-cloud-platform-build?in=terraform/gcp-get-started)
