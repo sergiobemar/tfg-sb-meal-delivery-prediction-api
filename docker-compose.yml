@@ -35,7 +35,7 @@ services:
     volumes:
       - ./clickhouse/custom_config.xml:/etc/clickhouse-server/config.d/custom_config.xml
       - ./clickhouse/users.xml:/etc/clickhouse-server/users.xml
-      - ./api/data/:/var/lib/clickhouse
+      - ./api/data/:/var/lib/clickhouse/user_files
     ulimits:
       nofile:
         soft: 262144
