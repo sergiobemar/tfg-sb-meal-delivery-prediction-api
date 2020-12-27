@@ -28,7 +28,7 @@ class ClickhouseClient(Client):
 			compression = True,
 			settings = {'use_numpy' : True}
 		)
-	
+
 	def create_database(self, database, if_not_exists = True):
 		"""
 		Creates a named database in the Clickhouse server
