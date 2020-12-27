@@ -16,22 +16,22 @@ from api.src.data.data_collect import read_test_data, read_train_data
 from api.src.model.xgboost_model import get_predictions, preprocess_data, train_xgboost_model
 from api.src.schema import schema
 
-from api.src.clickhouse.ClickhouseClient import ClickhouseClient
+from api.src.data.ClickhouseClient import ClickhouseClient
 
 app = FastAPI(title = 'Predicción de pedidos API') 
 
 # Read Clickhouse credentials and connect to the database
-#filename_credentials = '.credentials/clickhouse_credentials.json'
-#with open(filename_credentials, 'r') as f:
-#	credentials = json.load(f)
+filename_credentials = '.credentials/clickhouse_credentials.json'
+with open(filename_credentials, 'r') as f:
+	credentials = json.load(f)
 
-#client = ClickhouseClient(
-#	host = credentials['host'],
-#	port = credentials['port'],
-#	user = credentials['user'],
-#	password = credentials['password'],
-#	database = credentials['database']
-#)
+client = ClickhouseClient(
+	host = credentials['host'],
+	port = credentials['port'],
+	user = credentials['user'],
+	password = credentials['password'],
+	database = credentials['database']
+)
 
 # Read datasets
 df_test = read_test_data()

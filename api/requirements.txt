@@ -5,6 +5,7 @@ blinker==1.4
 certifi==2018.1.18
 chardet==3.0.4
 click==7.1.2
+clickhouse-cityhash==1.0.2.3
 clickhouse-driver==0.2.0
 cmake==3.18.2.post1
 colorama==0.3.7
@@ -29,6 +30,7 @@ jsonpointer==1.10
 jsonschema==2.6.0
 keyring==10.6.0
 keyrings.alt==3.0
+lz4==3.0.1
 MarkupSafe==1.1.1
 netifaces==0.10.4
 numpy==1.19.2
