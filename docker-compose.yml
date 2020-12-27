@@ -5,7 +5,9 @@ services:
   api:
     container_name: apiserver
     restart: always
-    build: ./api
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile
     volumes: ['./api:/api']
     networks:
       - apinetwork

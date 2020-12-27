@@ -9,7 +9,8 @@ WORKDIR /tmp
 RUN pip3 install -r requirements.txt
 
 #copy app
-COPY . /api
+COPY /api /api
+COPY /clickhouse/src/data /api/src/clickhouse
 WORKDIR /
 
 CMD ["gunicorn", "-w", "3", "-b", "0.0.0.0:5000", "-t", "360", "--reload", "api.app:app", "-k", "uvicorn.workers.UvicornWorker"]
