@@ -16,7 +16,7 @@ from api.src.data.data_collect import read_test_data, read_train_data
 from api.src.model.xgboost_model import get_predictions, preprocess_data, train_xgboost_model
 from api.src.schema import schema
 
-#from clickhouse.src.data.ClickhouseClient import ClickhouseClient
+from api.src.clickhouse.ClickhouseClient import ClickhouseClient
 
 app = FastAPI(title = 'Predicción de pedidos API') 
 
