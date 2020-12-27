@@ -25,7 +25,7 @@ if __name__ == "__main__":
 	client.create_database(database)
 
 	# Read initialize config file
-	filename_init_config = 'initialize_config.json'
+	filename_init_config = 'clickhouse/clickhouse_config.json'
 	with open(filename_init_config, 'r') as f:
 		config = json.load(f)
 

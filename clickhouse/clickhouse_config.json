@@ -1,0 +1,128 @@
+{
+	"files" : [
+		{
+			"table_name" : "meal",
+			"path" : "./api/data/raw/meal_info.csv",
+			"schema" : [
+				{
+					"name" : "meal_id",
+					"type" : "Int64"
+				},
+				{
+					"name" : "category",
+					"type" : "String"
+				},
+				{
+					"name" : "cuisine",
+					"type" : "String"
+				}
+			]
+		},
+		{
+			"table_name" : "center",
+			"path" : "./api/data/raw/fulfilment_center_info.csv",
+			"schema" : [
+				{
+					"name" : "center_id",
+					"type" : "Int64"
+				},
+				{
+					"name" : "city_code",
+					"type" : "Int32"
+				},
+				{
+					"name" : "region_code",
+					"type" : "Int32 "
+				},
+				{
+					"name" : "center_type",
+					"type" : "String"
+				},
+				{
+					"name" : "op_area",
+					"type" : "Float32"
+				}
+			]
+		},
+		{
+			"table_name" : "train",
+			"path" : "./api/data/raw/train.csv",
+			"schema" : [
+				{
+					"name" : "id",
+					"type" : "Int64"
+				},
+				{
+					"name" : "week",
+					"type" : "Int16"
+				},
+				{
+					"name" : "center_id",
+					"type" : "Int64"
+				},
+				{
+					"name" : "meal_id",
+					"type" : "Int64"
+				},
+				{
+					"name" : "checkout_price",
+					"type" : "Float32"
+				},
+				{
+					"name" : "base_price",
+					"type" : "Float32"
+				},
+				{
+					"name" : "emailer_for_promotion",
+					"type" : "Int8"
+				},
+				{
+					"name" : "homepage_featured",
+					"type" : "Int8"
+				},
+				{
+					"name" : "num_orders",
+					"type" : "Int32"
+				}
+			]
+		},
+		{
+			"table_name" : "test",
+			"path" : "./api/data/raw/test.csv",
+			"schema" : [
+				{
+					"name" : "id",
+					"type" : "Int64"
+				},
+				{
+					"name" : "week",
+					"type" : "Int16"
+				},
+				{
+					"name" : "center_id",
+					"type" : "Int64"
+				},
+				{
+					"name" : "meal_id",
+					"type" : "Int64"
+				},
+				{
+					"name" : "checkout_price",
+					"type" : "Float32"
+				},
+				{
+					"name" : "base_price",
+					"type" : "Float32"
+				},
+				{
+					"name" : "emailer_for_promotion",
+					"type" : "Int8"
+				},
+				{
+					"name" : "homepage_featured",
+					"type" : "Int8"
+				}
+			]
+		}
+	]
+}
