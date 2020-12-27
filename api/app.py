@@ -90,9 +90,8 @@ def test():
 @app.get('/test_clickhouse')
 def test_clickhouse():
 
-	#df = client.query_dataframe('SELECT * FROM raw.meal LIMIT 10')
-	#return df.to_json(orient='records')
-	return 'message'
+	df = client.query_dataframe('SELECT * FROM raw.meal LIMIT 10')
+	return df.to_json(orient='records')
 
 @app.post('/test_params')
 def test_params(order : schema.Order):
