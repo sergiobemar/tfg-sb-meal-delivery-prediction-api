@@ -7,7 +7,7 @@ import pandas as pd
 if __name__ == "__main__":
 	
 	# Get Clickhouse credentials and connect
-	filename_credentials = 'clickhouse_credentials.json'
+	filename_credentials = '.credentials/clickhouse_credentials.json'
 	with open(filename_credentials, 'r') as f:
 		credentials = json.load(f)
 
