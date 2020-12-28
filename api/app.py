@@ -56,7 +56,8 @@ def get_meal():
 	
 	return JSONResponse(content=result)
 
-@app.get('/data/train', response_model = List[schema.DataModel]):
+@app.get('/data/train', response_model = List[schema.DataModel])
+def get_train_data():
 	# Receive the data from Clickhouse
 	df = client.query_dataframe('SELECT * FROM processed.train')
 
