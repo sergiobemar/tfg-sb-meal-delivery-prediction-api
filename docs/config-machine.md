@@ -138,13 +138,15 @@ FROM python:3.6
 RUN apt-get update 
 
 #install requirements
-COPY ./requirements.txt /tmp/requirements.txt
+COPY ./api/requirements.txt /tmp/requirements.txt
 WORKDIR /tmp
 RUN pip3 install -r requirements.txt
 
 #copy app
-COPY . /api
+COPY api /api
 WORKDIR /
+
+COPY .credentials /.credentials
 
 CMD ["gunicorn", "-w", "3", "-b", "0.0.0.0:5000", "-t", "360", "--reload", "api.app:app", "-k", "uvicorn.workers.UvicornWorker"]
 ```
@@ -301,7 +303,9 @@ services:
   api:
     container_name: apiserver
     restart: always
-    build: ./api
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile
     volumes: ['./api:/api']
     networks:
       - apinetwork
@@ -331,6 +335,8 @@ services:
     volumes:
       - ./clickhouse/custom_config.xml:/etc/clickhouse-server/config.d/custom_config.xml
       - ./clickhouse/users.xml:/etc/clickhouse-server/users.xml
+      - ./api/data/raw:/var/lib/clickhouse/user_files/raw
+      - ./api/data/processed:/var/lib/clickhouse/user_files/processed
     ulimits:
       nofile:
         soft: 262144
