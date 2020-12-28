@@ -1,11 +1,12 @@
-from api.src.clickhouse.ClickhouseClient import ClickhouseClient
 
 import json
 import os
 import pandas as pd
 
-def init_clickhouse():
-	
+from src.data.ClickhouseClient import ClickhouseClient
+
+if __name__ == "__main__":
+		
 	script_name = os.path.basename(__file__) + ': '
 
 	# Get Clickhouse credentials and connect
@@ -27,7 +28,7 @@ def init_clickhouse():
 	client.create_database(database)
 
 	# Read initialize config file
-	filename_init_config = './api/src/clickhouse/clickhouse_config.json'
+	filename_init_config = './clickhouse/clickhouse_config.json'
 	with open(filename_init_config, 'r') as f:
 		config = json.load(f)
 
@@ -107,3 +108,6 @@ def init_clickhouse():
 			LEFT JOIN raw.meal m ON m.meal_id = t.meal_id
 		)
 	""")
+
+	# Disconnect the client
+	client.disconnect()
