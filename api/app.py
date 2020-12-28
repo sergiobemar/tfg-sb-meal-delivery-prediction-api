@@ -56,6 +56,14 @@ def get_meal():
 	
 	return JSONResponse(content=result)
 
+@app.get('/data/test', response_model = List[schema.DataModel])
+def get_test_data():
+
+	# Transform the dataframe into JSON format in order to be able to send it through the API method
+	result = df_test.head().to_json(orient='records')
+	
+	return JSONResponse(content=result)
+
 @app.get('/data/train', response_model = List[schema.DataModel])
 def get_train_data():
 	# Receive the data from Clickhouse
