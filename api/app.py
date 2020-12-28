@@ -38,7 +38,7 @@ client = ClickhouseClient(
 )
 
 # Read datasets
-df_test = read_test_data()
+df_test = read_test_data(client)
 df_train = read_train_data(client)
 
 # Load model
