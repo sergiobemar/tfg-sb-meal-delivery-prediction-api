@@ -18,7 +18,11 @@ from api.src.schema import schema
 
 from api.src.data.ClickhouseClient import ClickhouseClient
 
-app = FastAPI(title = 'Predicción de pedidos API') 
+app = FastAPI(
+	title = "Predicción de pedidos API",
+	description = "Una API para proveer la información así como los cálculos de predicción sobre los pedidos de un centro de reparto de comidas a domicilio."
+    version = "2.0"
+) 
 
 # Read Clickhouse credentials and connect to the database
 filename_credentials = '.credentials/clickhouse_credentials.json'
@@ -35,7 +39,7 @@ client = ClickhouseClient(
 
 # Read datasets
 df_test = read_test_data()
-df_train = read_train_data()
+df_train = read_train_data(client)
 
 # Load model
 regressor_model = joblib.load('./api/models/xgboost_model.pkl')
@@ -44,9 +48,19 @@ regressor_model = joblib.load('./api/models/xgboost_model.pkl')
 @app.get('/data/meal', response_model = List[schema.Meal])
 def get_meal():
 
+	# Receive the data from Clickhouse
 	df = client.query_dataframe('SELECT * FROM raw.meal')
-	print(df.head())
+
+	# Transform the dataframe into JSON format in order to be able to send it through the API method
+	result = df.to_json(orient='records')
 	
+	return JSONResponse(content=result)
+
+@app.get('/data/train', response_model = List[schema.DataModel]):
+	# Receive the data from Clickhouse
+	df = client.query_dataframe('SELECT * FROM processed.train')
+
+	# Transform the dataframe into JSON format in order to be able to send it through the API method
 	result = df.to_json(orient='records')
 	
 	return JSONResponse(content=result)
