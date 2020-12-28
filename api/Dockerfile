@@ -14,6 +14,4 @@ WORKDIR /
 
 COPY .credentials /.credentials
 
-RUN python3 ./api/src/deploy/init_clickhouse.py
-
 CMD ["gunicorn", "-w", "3", "-b", "0.0.0.0:5000", "-t", "360", "--reload", "api.app:app", "-k", "uvicorn.workers.UvicornWorker"]

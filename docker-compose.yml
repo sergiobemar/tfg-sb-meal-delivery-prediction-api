@@ -36,9 +36,9 @@ services:
     hostname: clickhouse
     container_name: clickhouse
     restart: always
-    # build:
-    #   context: .
-    #   dockerfile: ./clickhouse/Dockerfile
+    #build:
+    #  context: .
+    #  dockerfile: ./clickhouse/Dockerfile
     ports:
       - 9001:9000
       - 8123:8123
