@@ -30,27 +30,6 @@ services:
       - "8080"
     ports:
       - "80:8080"
-  
-  clickhouse:
-    image: yandex/clickhouse-server
-    hostname: clickhouse
-    container_name: clickhouse
-    restart: always
-    #build:
-    #  context: .
-    #  dockerfile: ./clickhouse/Dockerfile
-    ports:
-      - 9001:9000
-      - 8123:8123
-    volumes:
-      - ./clickhouse/custom_config.xml:/etc/clickhouse-server/config.d/custom_config.xml
-      - ./clickhouse/users.xml:/etc/clickhouse-server/users.xml
-      - ./api/data/raw:/var/lib/clickhouse/user_files/raw
-      - ./api/data/processed:/var/lib/clickhouse/user_files/processed
-    ulimits:
-      nofile:
-        soft: 262144
-        hard: 262144
 
 networks:
   apinetwork:
