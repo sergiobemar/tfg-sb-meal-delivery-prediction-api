@@ -17,16 +17,12 @@ from api.src.model.xgboost_model import get_predictions, preprocess_data, train_
 from api.src.schema import schema
 
 from api.src.clickhouse.ClickhouseClient import ClickhouseClient
-from api.src.clickhouse.init_clickhouse import init_clickhouse
 
 app = FastAPI(
 	title = "Predicción de pedidos API",
 	description = "Una API para proveer la información así como los cálculos de predicción sobre los pedidos de un centro de reparto de comidas a domicilio.",
 	version = "2.0"
 ) 
-
-# Initialize Clickhouse database
-#init_clickhouse()
 
 # Read Clickhouse credentials and connect to the database
 filename_credentials = '.credentials/clickhouse_credentials.json'
