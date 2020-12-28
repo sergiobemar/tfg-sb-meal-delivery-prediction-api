@@ -1,4 +1,4 @@
-from src.data.ClickhouseClient import ClickhouseClient
+from api.src.data.ClickhouseClient import ClickhouseClient
 
 import json
 import os

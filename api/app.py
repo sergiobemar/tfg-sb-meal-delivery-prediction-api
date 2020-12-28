@@ -13,11 +13,11 @@ from typing import List
 #os.chdir('/home/jupyter/tfg-sb-meal-delivery-prediction/')
 
 from api.src.data.data_collect import read_test_data, read_train_data
-from api.src.data.init_clickhouse import init_clickhouse
 from api.src.model.xgboost_model import get_predictions, preprocess_data, train_xgboost_model
 from api.src.schema import schema
 
 from api.src.data.ClickhouseClient import ClickhouseClient
+from api.src.data.init_clickhouse import init_clickhouse
 
 app = FastAPI(
 	title = "Predicción de pedidos API",
