@@ -26,7 +26,7 @@ app = FastAPI(
 ) 
 
 # Initialize Clickhouse database
-init_clickhouse()
+#init_clickhouse()
 
 # Read Clickhouse credentials and connect to the database
 filename_credentials = '.credentials/clickhouse_credentials.json'
