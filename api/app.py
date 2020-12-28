@@ -59,10 +59,10 @@ def get_meal():
 @app.get('/data/train', response_model = List[schema.DataModel])
 def get_train_data():
 	# Receive the data from Clickhouse
-	df = client.query_dataframe('SELECT * FROM processed.train')
+	#df = client.query_dataframe('SELECT * FROM processed.train')
 
 	# Transform the dataframe into JSON format in order to be able to send it through the API method
-	result = df.to_json(orient='records')
+	result = df_train.head().to_json(orient='records')
 	
 	return JSONResponse(content=result)
 
