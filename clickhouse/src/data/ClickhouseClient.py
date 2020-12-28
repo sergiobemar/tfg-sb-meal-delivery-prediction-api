@@ -1,6 +1,7 @@
 from clickhouse_driver import Client
 from csv import DictReader
 
+import os
 import pandas as pd
 
 class ClickhouseClient(Client):
@@ -17,6 +18,10 @@ class ClickhouseClient(Client):
 			database (str): which is the database where is going to be connected
 		"""
 
+		# Set script name
+		self.script_name = os.path.basename(__file__) + ": "
+
+		# Create connection
 		Client.__init__(
 			self,
 			host = host,
@@ -28,6 +33,8 @@ class ClickhouseClient(Client):
 			compression = True,
 			settings = {'use_numpy' : True}
 		)
+
+		print(self.script_name + "connection to " + host + " done")
 
 	def create_database(self, database, if_not_exists = True):
 		"""
@@ -45,6 +52,8 @@ class ClickhouseClient(Client):
 			sentence = 'CREATE DATABASE ' + database
 
 		self.execute(sentence)
+
+		print(self.script_name + "database " + database + " created")
 
 	def create_table(self, table_name, database, fields, if_not_exists = True):
 		"""
@@ -81,6 +90,8 @@ class ClickhouseClient(Client):
 
 		self.execute(sentence)
 
+		print(self.script_name + "table " + table_name + " created")
+
 	def drop_database(self, database, if_exists = True):
 		"""
 		Delete a specific database, in addition the flag "if_exists" allows to avoid the error due to existance of the database
@@ -103,6 +114,8 @@ class ClickhouseClient(Client):
 
 		# Execute sentence
 		self.execute(sentence)
+
+		print(self.script_name + "database " + database + " created")
 
 	def drop_table(self, table_name, database, if_exists = True):
 		"""
@@ -127,6 +140,8 @@ class ClickhouseClient(Client):
 
 		# Execute sentence
 		self.execute(sentence)
+
+		print(self.script_name + 'table ' + table_name + ' deleted')
 
 	def insert_dataframe_into_table(self, table_name, database, df):
 		"""

@@ -6,6 +6,8 @@ import pandas as pd
 
 if __name__ == "__main__":
 	
+	script_name = os.path.basename(__file__) + ': '
+
 	# Get Clickhouse credentials and connect
 	filename_credentials = '.credentials/clickhouse_credentials.json'
 	with open(filename_credentials, 'r') as f:
@@ -35,7 +37,7 @@ if __name__ == "__main__":
 		# Create the table
 		## First, get the schema and create a table using it in Clickhouse database
 		client.create_table(t['table_name'], database, t['schema'])
-	
+
 		# Read csv and insert data into its table
 		df = pd.read_csv(t['path'])
 
