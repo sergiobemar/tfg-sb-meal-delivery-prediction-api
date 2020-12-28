@@ -6,7 +6,8 @@ def read_test_data():
 
 	return df_test
 
-def read_train_data():
-	df_train = pd.read_csv('./api/data/processed/train.csv', sep = ';', decimal=',')
+def read_train_data(client):
+	# df_train = pd.read_csv('./api/data/processed/train.csv', sep = ';', decimal=',')
 
+	df_train = client.query_dataframe('SELECT * FROM processed.train')
 	return df_train
