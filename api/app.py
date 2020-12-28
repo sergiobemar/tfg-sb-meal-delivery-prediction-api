@@ -20,8 +20,8 @@ from api.src.data.ClickhouseClient import ClickhouseClient
 
 app = FastAPI(
 	title = "Predicción de pedidos API",
-	description = "Una API para proveer la información así como los cálculos de predicción sobre los pedidos de un centro de reparto de comidas a domicilio."
-    version = "2.0"
+	description = "Una API para proveer la información así como los cálculos de predicción sobre los pedidos de un centro de reparto de comidas a domicilio.",
+	version = "2.0"
 ) 
 
 # Read Clickhouse credentials and connect to the database
