@@ -5,8 +5,6 @@ services:
   api:
     container_name: apiserver
     restart: always
-    depends_on:
-      - clickhouse
     build:
       context: .
       dockerfile: ./api/Dockerfile
@@ -22,8 +20,6 @@ services:
     container_name: nginx
     restart: always
     build: ./nginx
-    depends_on:
-      - api
     networks:
       - apinetwork
     expose:
