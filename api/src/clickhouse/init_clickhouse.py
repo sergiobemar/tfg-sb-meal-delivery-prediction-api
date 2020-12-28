@@ -1,4 +1,4 @@
-from api.src.data.ClickhouseClient import ClickhouseClient
+from api.src.clickhouse.ClickhouseClient import ClickhouseClient
 
 import json
 import os
@@ -27,7 +27,7 @@ def init_clickhouse():
 	client.create_database(database)
 
 	# Read initialize config file
-	filename_init_config = 'clickhouse/clickhouse_config.json'
+	filename_init_config = './clickhouse_config.json'
 	with open(filename_init_config, 'r') as f:
 		config = json.load(f)
 
