@@ -70,7 +70,7 @@ def get_train_data():
 	#df = client.query_dataframe('SELECT * FROM processed.train')
 
 	# Transform the dataframe into JSON format in order to be able to send it through the API method
-	result = df_train.head().to_json(orient='records')
+	result = df_train.to_json(orient='records')
 	
 	return JSONResponse(content=result)
 
