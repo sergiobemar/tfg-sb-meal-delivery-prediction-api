@@ -76,7 +76,7 @@ async def get_train_data():
 
 @app.get('/file/raw/train')
 async def get_file_raw_train():
-	return FileResponse('./api/data/train.csv')
+	return FileResponse('./api/data/raw/train.csv')
 
 @app.get('/predict', response_model = List[schema.Prediction])
 async def predict(center_id : int, meal_id : int):
