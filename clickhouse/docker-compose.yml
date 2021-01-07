@@ -11,8 +11,11 @@ services:
       - 9001:9000
       - 8123:8123
     volumes:
+      - ./data:/var/lib/clickhouse
       - ./custom_config.xml:/etc/clickhouse-server/config.d/custom_config.xml
       - ./users.xml:/etc/clickhouse-server/users.xml
+      - ../api/data/raw/:/var/lib/clickhouse/user_files/
+      - ./src/deploy/:/docker-entrypoint-initdb.d/
     ulimits:
       nofile:
         soft: 262144
