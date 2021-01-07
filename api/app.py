@@ -7,7 +7,7 @@ import sys
 
 from datetime import timedelta
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from typing import List
 
 #os.chdir('/home/jupyter/tfg-sb-meal-delivery-prediction/')
@@ -38,7 +38,7 @@ client = ClickhouseClient(
 )
 
 # Read datasets
-df_test = read_test_data()
+df_test = read_test_data(client)
 df_train = read_train_data(client)
 
 # Load model
@@ -46,7 +46,7 @@ regressor_model = joblib.load('./api/models/xgboost_model.pkl')
 # features = joblib.load('./models/xgboost_features.pkl')
 
 @app.get('/data/meal', response_model = List[schema.Meal])
-def get_meal():
+async def get_meal():
 
 	# Receive the data from Clickhouse
 	df = client.query_dataframe('SELECT * FROM raw.meal')
@@ -56,18 +56,30 @@ def get_meal():
 	
 	return JSONResponse(content=result)
 
+@app.get('/data/test', response_model = List[schema.DataModel])
+async def get_test_data():
+
+	# Transform the dataframe into JSON format in order to be able to send it through the API method
+	result = df_test.head().to_json(orient='records')
+	
+	return JSONResponse(content=result)
+
 @app.get('/data/train', response_model = List[schema.DataModel])
-def get_train_data():
+async def get_train_data():
 	# Receive the data from Clickhouse
 	#df = client.query_dataframe('SELECT * FROM processed.train')
 
 	# Transform the dataframe into JSON format in order to be able to send it through the API method
-	result = df_train.head().to_json(orient='records')
+	result = df_train.to_json(orient='records')
 	
 	return JSONResponse(content=result)
 
+@app.get('/file/raw/train')
+async def get_file_raw_train():
+	return FileResponse('./api/data/raw/train.csv')
+
 @app.get('/predict', response_model = List[schema.Prediction])
-def predict(center_id : int, meal_id : int):
+async def predict(center_id : int, meal_id : int):
 	
 	# Load model
 	regressor_model = joblib.load('./api/models/xgboost_model.pkl')
@@ -106,20 +118,20 @@ def predict(center_id : int, meal_id : int):
 	return JSONResponse(content=result)
 
 @app.get('/test')
-def test():
+async def test():
 	return {
 		'message': 'test successful!!!!!',
 		'test' : str(df_train.size)
 	}
 
 @app.get('/test_clickhouse')
-def test_clickhouse():
+async def test_clickhouse():
 
 	df = client.query_dataframe('SELECT * FROM raw.meal LIMIT 10')
 	return df.to_json(orient='records')
 
 @app.post('/test_params')
-def test_params(order : schema.Order):
+async def test_params(order : schema.Order):
 
 	return {
 		'message' : 'Params received',
@@ -128,7 +140,7 @@ def test_params(order : schema.Order):
 	}
 
 @app.post('/train')
-def train(order : schema.Order):
+async def train(order : schema.Order):
 		
 	center_id = order.center_id
 	meal_id = order.meal_id
