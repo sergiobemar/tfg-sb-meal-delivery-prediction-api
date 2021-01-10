@@ -26,13 +26,18 @@ tags_metadata = [
 	},
 	{
 		"name" : "data",
-		"description" : "Show and get the data from database. They are "
+		"description" : "Show and get the data from database.",
+		"externalDocs" : {
+			"description" : "If you want more information about the Clickhouse connector, you can check the website about the module `clickhouse-driver`",
+			"url" : "https://clickhouse-driver.readthedocs.io/en/latest/"
+		}
 	},
 	{
-		"name" : "prediction",
-		"description" : "Operations in order to make the prediction."
+		"name" : "test",
+		"description" : "Some methods in order to test API functionality."
 	}
 ]
+
 app = FastAPI(
 	title = "Predicción de pedidos API",
 	description = "Una API para proveer la información así como los cálculos de predicción sobre los pedidos de un centro de reparto de comidas a domicilio.",
