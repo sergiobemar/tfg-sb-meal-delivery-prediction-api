@@ -26,9 +26,9 @@ tags_metadata = [
 	},
 	{
 		"name" : "data",
-		"description" : "Show and get the data from database.",
+		"description" : "Show and get the data from database. For this procedure it's used the module `clickhouse-driver` plus a class that inherits from it.",
 		"externalDocs" : {
-			"description" : "If you want more information about the Clickhouse connector, you can check the website about the module `clickhouse-driver`",
+			"description" : "For more information see its website",
 			"url" : "https://clickhouse-driver.readthedocs.io/en/latest/"
 		}
 	},
