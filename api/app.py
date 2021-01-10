@@ -75,7 +75,7 @@ async def get_center(limit: int = 10):
 		limit (int, optional): set the limit of rows that user need. If this value is 0, it's returned whole dataframe. Defaults to 10.
 
 	Returns:
-		List Center data: rows from meal data
+		List Center data: rows from center data
 	"""
 
 	# Receive the data from Clickhouse
