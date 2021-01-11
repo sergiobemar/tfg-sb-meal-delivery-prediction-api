@@ -10,8 +10,6 @@ from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.responses import JSONResponse
 from typing import List
 
-#os.chdir('/home/jupyter/tfg-sb-meal-delivery-prediction/')
-
 from api.src.data.data_collect import read_test_data, read_train_data
 from api.src.model.xgboost_model import get_predictions, preprocess_data, train_xgboost_model
 from api.src.schema import schema
@@ -241,6 +239,51 @@ async def upload_data_meal(file: UploadFile = File(...), separator: str = ","):
 		"rows" : str(rows)
 	}
 
+@app.post('/data/upload/train', tags=["data"])
+async def upload_data_train(file: UploadFile = File(...), separator: str = ","):
+	"""
+	Allows the user to upload a csv file of train data to its corresponding table.
+
+	The file must be structured like this, being the separator that the user wants:
+		
+		id,week,center_id,meal_id,checkout_price,base_price,emailer_for_promotion,homepage_featured,num_orders
+
+		1,1,55,1885,136.83,152.29,0,0,177
+
+	Args:
+		file (UploadFile, optional): [description]. Defaults to File(...). The csv file with the data of the centers in order to insert into the table
+		separator (str, optional): [description]. Defaults to ",". The separator of the csv file
+
+	Returns:
+		filename (str): The name of the uploaded csv
+		rows (str): Number of rows inserted into the table
+	"""
+
+	# Defining the schema
+	schema = {
+		'id' : int,
+		'week' : int,
+		'center_id' : int,
+		'meal_id' : int,
+		'checkout_price' : float,
+		'base_price' : float,
+		'emailer_for_promotion' : int,
+		'homepage_featured' : int,
+		'num_orders' : int
+	}
+
+	# Try to insert the csv file into the table
+	try:
+		rows = client.insert_csv_file_into_table(table_name="train", file=file, schema=schema, database="raw", separator=",")
+	except:
+		raise HTTPException(status_code = 404, detail='There was an error when it tried to insert the csv in the file')
+
+	return {
+		"filename" : file.filename,
+		"rows" : str(rows)
+	}
+
+
 # Prediction methods
 @app.get('/predict', response_model = List[schema.Prediction], tags=["prediction"])
 async def predict(center_id : int, meal_id : int):
@@ -258,7 +301,7 @@ async def predict(center_id : int, meal_id : int):
 
 	# Load model
 	regressor_model = joblib.load('./api/models/xgboost_model.pkl')
-# 	features = joblib.load('./models/xgboost_features.pkl')
+ 	# features = joblib.load('./models/xgboost_features.pkl')
 
 	# Get center and meal from the request
 	# content = request.json
@@ -280,7 +323,7 @@ async def predict(center_id : int, meal_id : int):
 	print('NUM ROWS: ' + str(len(df_test_preprocessed.index)))	
 	print(df_test_preprocessed)
 	
-# 	# Assign index from source dataframe and, so that we're able to have another column with the date, index is reseted
+ 	# Assign index from source dataframe and, so that we're able to have another column with the date, index is reseted
 	df_result = get_predictions(regressor_model, df_test_preprocessed, df_test_preprocessed.index)
 	df_result.reset_index(inplace=True)
 	df_result['date'] = df_result.date
@@ -322,11 +365,11 @@ async def train(order : schema.OrderTrain):
 
 	# Save the model and features
 	joblib.dump(regressor_model, './api/models/xgboost_model.pkl')
-# 	joblib.dump(features, './models/xgboost_features.pkl')
+ 	# joblib.dump(features, './models/xgboost_features.pkl')
 	
 	# Return dict results
 	result = {
-# 		'features' : features,
+ 		# 'features' : features,
 		'rmse' : rmse
 	}
 
