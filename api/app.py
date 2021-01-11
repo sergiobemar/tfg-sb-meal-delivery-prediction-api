@@ -169,7 +169,9 @@ async def upload_data_center(file: UploadFile = File(...), separator: str = ";")
 	Allows the user to upload a csv file of center data to its corresponding table.
 
 	The file must be structured like this, being the separator that the user wants:
+		
 		center_id;city_code;region_code;center_type;op_area
+		
 		1;2;3;4;5
 
 	Args:
@@ -182,6 +184,12 @@ async def upload_data_center(file: UploadFile = File(...), separator: str = ";")
 	"""
 
 	df = pd.read_csv(file.file, sep=separator)
+
+	df['center_id'] = int(df['center_id'])
+	df['city_code'] = int(df['city_code'])
+	df['region_code'] = int(df['region_code'])
+	df['center_type'] = str(df['center_type'])
+	df['op_area'] = float(df['op_area'])
 
 	client.insert_dataframe_into_table("center", "raw", df)
 
