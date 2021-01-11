@@ -162,7 +162,7 @@ async def refresh_prediction_data():
 	return {"message" : "Dataframe were updating"}
 
 @app.post('/data/upload', tags=["data"])
-async def upload_data_center(table_name: str, database: str, file: UploadFile = File(...), schema : dict, separator: str = ","):
+async def upload_data_from_csv(table_name: str, database: str, file: UploadFile = File(...), schema : dict, separator: str = ","):
 	"""[summary]
 
 	Args:
