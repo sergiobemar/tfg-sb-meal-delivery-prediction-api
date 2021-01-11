@@ -197,14 +197,14 @@ async def upload_data_center(file: UploadFile = File(...), separator: str = ",")
 	# client.insert_dataframe_into_table("center", "raw", df)
 
 	schema = {
-		'center_id' : str,
-		'city_code' : str,
-		'region_code' : str,
+		'center_id' : int,
+		'city_code' : int,
+		'region_code' : int,
 		'center_type' : str,
-		'op_area' : str
+		'op_area' : float
 	}
 
-	client.insert_csv_file_into_table(table_name="center", file, schema, database="raw", separator=",")
+	client.insert_csv_file_into_table(table_name="center", file=file, schema=schema, database="raw", separator=",")
 	return {
 		"filename" : file.filename,
 		"rows" : str(len(df))
@@ -236,7 +236,7 @@ async def upload_data_meal(file: UploadFile = File(...), separator: str = ","):
 		'cuisine' : str
 	}
 
-	client.insert_csv_file_into_table(table_name="center", file, schema, database="raw", separator=",")
+	client.insert_csv_file_into_table(table_name="center", file=file, schema=schema, database="raw", separator=",")
 
 	return {
 		"filename" : file.filename,
