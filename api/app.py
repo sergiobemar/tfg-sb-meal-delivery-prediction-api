@@ -183,19 +183,28 @@ async def upload_data_center(file: UploadFile = File(...), separator: str = ";")
 		rows (int): Number of rows inserted into the table
 	"""
 
-	df = pd.read_csv(file.file, sep=separator)
+	# df = pd.read_csv(file.file, sep=separator)
 
-	df['center_id'] = int(df['center_id'])
-	df['city_code'] = int(df['city_code'])
-	df['region_code'] = int(df['region_code'])
-	df['center_type'] = str(df['center_type'])
-	df['op_area'] = float(df['op_area'])
+	# df['center_id'] = int(df['center_id'])
+	# df['city_code'] = int(df['city_code'])
+	# df['region_code'] = int(df['region_code'])
+	# df['center_type'] = str(df['center_type'])
+	# df['op_area'] = float(df['op_area'])
 
-	client.insert_dataframe_into_table("center", "raw", df)
+	# client.insert_dataframe_into_table("center", "raw", df)
+
+	schema = {
+		"center_id": int,
+		"city_code": int,
+		"region_code": int,
+		"center_type": str,
+		"op_area": float
+	}
+
+	client.insert_csv_file_into_table("center", file.file, schema, "raw")
 
 	return {
-		"filename" : file.filename,
-		"rows" : str(len(df))
+		"filename" : file.filename
 	}
 
 # Prediction methods
