@@ -31,6 +31,10 @@ tags_metadata = [
 		}
 	},
 	{
+		"name" : "upload",
+		"description" : "Operations in order to upload data and insert it to the specific tables into the Clickhouse database."
+	},
+	{
 		"name" : "test",
 		"description" : "Some methods in order to test API functionality."
 	}
@@ -168,271 +172,6 @@ async def refresh_prediction_data():
 		df_train = df_train_new.copy()
 
 	return {"message" : "Dataframe were updating"}
-
-@app.post('/data/upload', tags=["data"])
-async def upload_data_from_csv(table_name: str, database: str, schema_file : UploadFile = File(...), input_file: UploadFile = File(...), separator: str = ","):
-	"""
-	Uploads a specific csv file to the table which user wants, setting both the schema of the file and the database
-
-	Args:
-		
-		table_name (str): the name of the table where is going to be saved the data
-		
-		database (str): the name of the database where the table is located in
-		
-		schema (UploadFile, optional): json file with the schema of the input file. The structure of the json file must be the following:
-
-			{
-		
-				"column_name_1" : "int",
-		
-				"column_name_2" : "str",
-		
-				"column_name_3" : "float",
-		
-			} 
-		
-		input_file (UploadFile, optional): The csv file that it's wanted to be inserted into the table. Defaults to File(...). 
-		
-		separator (str, optional): The separator of the csv file. Defaults to ",".
-
-	Raises:
-		HTTPException: raised exception when method fails in insert procedure
-
-	Returns:
-		filename (str): The name of the uploaded csv
-		rows (str): Number of rows inserted into the table
-	"""
-
-	# Read the json file
-	data_json = json.load(schema_file.file)
-
-	# Cast type strings to object type from json file
-	schema = dict()
-
-	for i, j in data_json.items():
-
-		# Column name
-		column_name = i
-		
-		# Type
-		if j == 'int':
-			column_type = int
-		elif j == 'float':
-			column_type = float
-		else:
-			column_type = str
-		
-		# Added to schema dict
-		schema[column_name] = column_type
-	
-	# Try to insert the csv file into the table
-	try:
-		rows = client.insert_csv_file_into_table(table_name=table_name, file=input_file, schema=schema, database=database, separator=separator)
-	except:
-		raise HTTPException(status_code = 404, detail='There was an error when it tried to insert the csv in the file')
-
-	return {
-		"filename" : input_file.filename,
-		"rows" : str(rows)
-	}
-
-@app.post('/data/upload/center', tags=["data"])
-async def upload_data_center(file: UploadFile = File(...), separator: str = ","):
-	"""
-	Allows the user to upload a csv file of center data to its corresponding table in raw schema.
-
-	The file must be structured like this, being the separator that the user wants:
-		
-		center_id,city_code,region_code,center_type,op_area
-
-		11,679,56,TYPE_A,3.7
-
-	Args:
-		
-		file (UploadFile, optional): The csv file with the data of the centers in order to insert into the table. Defaults to File(...). 
-		
-		separator (str, optional): The separator of the csv file. Defaults to ",".
-
-	Raises:
-		
-		HTTPException: raised exception when method fails in insert procedure
-
-	Returns:
-		
-		filename (str): The name of the uploaded csv
-		
-		rows (str): Number of rows inserted into the table
-	"""
-
-	# Defining the schema
-	schema = {
-		'center_id' : int,
-		'city_code' : int,
-		'region_code' : int,
-		'center_type' : str,
-		'op_area' : float
-	}
-
-	# Try to insert the csv file into the table
-	try:
-		rows = client.insert_csv_file_into_table(table_name="center", file=file, schema=schema, database="raw", separator=separator)
-	except:
-		raise HTTPException(status_code = 404, detail='There was an error when it tried to insert the csv in the file')
-
-	return {
-		"filename" : file.filename,
-		"rows" : str(rows)
-	}
-
-@app.post('/data/upload/meal', tags=["data"])
-async def upload_data_meal(file: UploadFile = File(...), separator: str = ","):
-	"""
-	Allows the user to upload a csv file of meal data to its corresponding table in raw schema.
-
-	The file must be structured like this, being the separator that the user wants:
-		
-		meal_id,category,cuisine
-		
-		1885,Beverages,Thai
-
-	Args:
-		
-		file (UploadFile, optional): The csv file with the data of the meals in order to insert into the table. Defaults to File(...).
-		
-		separator (str, optional): The separator of the csv file. Defaults to ",".
-
-	Raises:
-		
-		HTTPException: raised exception when method fails in insert procedure
-
-	Returns:
-		
-		filename (str): The name of the uploaded csv
-		
-		rows (str): Number of rows inserted into the table
-	"""
-
-	# Defining the schema
-	schema = {
-		'meal_id' : int,
-		'category' : str,
-		'cuisine' : str
-	}
-
-	# Try to insert the csv file into the table
-	try:
-		rows = client.insert_csv_file_into_table(table_name="meal", file=file, schema=schema, database="raw", separator=separator)
-	except:
-		raise HTTPException(status_code = 404, detail='There was an error when it tried to insert the csv in the file')
-
-	return {
-		"filename" : file.filename,
-		"rows" : str(rows)
-	}
-
-@app.post('/data/upload/test', tags=["data"])
-async def upload_data_test(file: UploadFile = File(...), separator: str = ","):
-	"""
-	Allows the user to upload a csv file of test data to its corresponding table in raw schema.
-
-	The file must be structured like this, being the separator that the user wants:
-		
-		id,week,center_id,meal_id,checkout_price,base_price,emailer_for_promotion,homepage_featured
-
-		1,1,55,1885,136.83,152.29,0,0
-
-	Args:
-		
-		file (UploadFile, optional): The csv file with the data of the features of sales in order to insert into the table. Defaults to File(...).
-		
-		separator (str, optional): The separator of the csv file. Defaults to ",".
-
-	Raises:
-		
-		HTTPException: raised exception when method fails in insert procedure
-
-	Returns:
-		
-		filename (str): The name of the uploaded csv
-		
-		rows (str): Number of rows inserted into the table
-	"""
-
-	# Defining the schema
-	schema = {
-		'id' : int,
-		'week' : int,
-		'center_id' : int,
-		'meal_id' : int,
-		'checkout_price' : float,
-		'base_price' : float,
-		'emailer_for_promotion' : int,
-		'homepage_featured' : int
-	}
-
-	# Try to insert the csv file into the table
-	try:
-		rows = client.insert_csv_file_into_table(table_name="test", file=file, schema=schema, database="raw", separator=separator)
-	except:
-		raise HTTPException(status_code = 404, detail='There was an error when it tried to insert the csv in the file')
-
-	return {
-		"filename" : file.filename,
-		"rows" : str(rows)
-	}
-
-@app.post('/data/upload/train', tags=["data"])
-async def upload_data_train(file: UploadFile = File(...), separator: str = ","):
-	"""
-	Allows the user to upload a csv file of train data to its corresponding table in raw schema.
-
-	The file must be structured like this, being the separator that the user wants:
-		
-		id,week,center_id,meal_id,checkout_price,base_price,emailer_for_promotion,homepage_featured,num_orders
-
-		1,1,55,1885,136.83,152.29,0,0,177
-
-	Args:
-		
-		file (UploadFile, optional): The csv file with the data of the historical sales in order to insert into the table. Defaults to File(...).
-		
-		separator (str, optional): The separator of the csv file. Defaults to ",". 
-
-	Raises:
-		
-		HTTPException: raised exception when method fails in insert procedure
-
-	Returns:
-		
-		filename (str): The name of the uploaded csv
-		
-		rows (str): Number of rows inserted into the table
-	"""
-
-	# Defining the schema
-	schema = {
-		'id' : int,
-		'week' : int,
-		'center_id' : int,
-		'meal_id' : int,
-		'checkout_price' : float,
-		'base_price' : float,
-		'emailer_for_promotion' : int,
-		'homepage_featured' : int,
-		'num_orders' : int
-	}
-
-	# Try to insert the csv file into the table
-	try:
-		rows = client.insert_csv_file_into_table(table_name="train", file=file, schema=schema, database="raw", separator=separator)
-	except:
-		raise HTTPException(status_code = 404, detail='There was an error when it tried to insert the csv in the file')
-
-	return {
-		"filename" : file.filename,
-		"rows" : str(rows)
-	}
 
 # Prediction methods
 @app.get('/predict', response_model = List[schema.Prediction], tags=["prediction"])
@@ -603,4 +342,270 @@ async def test_upload_file(file: UploadFile = File(...)):
 	return {
 		"filename" : file.filename,
 		"rows" : str(len(dataframe))
+	}
+
+# Upload data
+@app.post('/data/upload', tags=["upload"])
+async def upload_data_from_csv(table_name: str, database: str, schema_file : UploadFile = File(...), input_file: UploadFile = File(...), separator: str = ","):
+	"""
+	Uploads a specific csv file to the table which user wants, setting both the schema of the file and the database
+
+	Args:
+		
+		table_name (str): the name of the table where is going to be saved the data
+		
+		database (str): the name of the database where the table is located in
+		
+		schema (UploadFile, optional): json file with the schema of the input file. The structure of the json file must be the following:
+
+			{
+		
+				"column_name_1" : "int",
+		
+				"column_name_2" : "str",
+		
+				"column_name_3" : "float",
+		
+			} 
+		
+		input_file (UploadFile, optional): The csv file that it's wanted to be inserted into the table. Defaults to File(...). 
+		
+		separator (str, optional): The separator of the csv file. Defaults to ",".
+
+	Raises:
+		HTTPException: raised exception when method fails in insert procedure
+
+	Returns:
+		filename (str): The name of the uploaded csv
+		rows (str): Number of rows inserted into the table
+	"""
+
+	# Read the json file
+	data_json = json.load(schema_file.file)
+
+	# Cast type strings to object type from json file
+	schema = dict()
+
+	for i, j in data_json.items():
+
+		# Column name
+		column_name = i
+		
+		# Type
+		if j == 'int':
+			column_type = int
+		elif j == 'float':
+			column_type = float
+		else:
+			column_type = str
+		
+		# Added to schema dict
+		schema[column_name] = column_type
+	
+	# Try to insert the csv file into the table
+	try:
+		rows = client.insert_csv_file_into_table(table_name=table_name, file=input_file, schema=schema, database=database, separator=separator)
+	except:
+		raise HTTPException(status_code = 404, detail='There was an error when it tried to insert the csv in the file')
+
+	return {
+		"filename" : input_file.filename,
+		"rows" : str(rows)
+	}
+
+@app.post('/data/upload/center', tags=["upload"])
+async def upload_data_center(file: UploadFile = File(...), separator: str = ","):
+	"""
+	Allows the user to upload a csv file of center data to its corresponding table in raw schema.
+
+	The file must be structured like this, being the separator that the user wants:
+		
+		center_id,city_code,region_code,center_type,op_area
+
+		11,679,56,TYPE_A,3.7
+
+	Args:
+		
+		file (UploadFile, optional): The csv file with the data of the centers in order to insert into the table. Defaults to File(...). 
+		
+		separator (str, optional): The separator of the csv file. Defaults to ",".
+
+	Raises:
+		
+		HTTPException: raised exception when method fails in insert procedure
+
+	Returns:
+		
+		filename (str): The name of the uploaded csv
+		
+		rows (str): Number of rows inserted into the table
+	"""
+
+	# Defining the schema
+	schema = {
+		'center_id' : int,
+		'city_code' : int,
+		'region_code' : int,
+		'center_type' : str,
+		'op_area' : float
+	}
+
+	# Try to insert the csv file into the table
+	try:
+		rows = client.insert_csv_file_into_table(table_name="center", file=file, schema=schema, database="raw", separator=separator)
+	except:
+		raise HTTPException(status_code = 404, detail='There was an error when it tried to insert the csv in the file')
+
+	return {
+		"filename" : file.filename,
+		"rows" : str(rows)
+	}
+
+@app.post('/data/upload/meal', tags=["upload"])
+async def upload_data_meal(file: UploadFile = File(...), separator: str = ","):
+	"""
+	Allows the user to upload a csv file of meal data to its corresponding table in raw schema.
+
+	The file must be structured like this, being the separator that the user wants:
+		
+		meal_id,category,cuisine
+		
+		1885,Beverages,Thai
+
+	Args:
+		
+		file (UploadFile, optional): The csv file with the data of the meals in order to insert into the table. Defaults to File(...).
+		
+		separator (str, optional): The separator of the csv file. Defaults to ",".
+
+	Raises:
+		
+		HTTPException: raised exception when method fails in insert procedure
+
+	Returns:
+		
+		filename (str): The name of the uploaded csv
+		
+		rows (str): Number of rows inserted into the table
+	"""
+
+	# Defining the schema
+	schema = {
+		'meal_id' : int,
+		'category' : str,
+		'cuisine' : str
+	}
+
+	# Try to insert the csv file into the table
+	try:
+		rows = client.insert_csv_file_into_table(table_name="meal", file=file, schema=schema, database="raw", separator=separator)
+	except:
+		raise HTTPException(status_code = 404, detail='There was an error when it tried to insert the csv in the file')
+
+	return {
+		"filename" : file.filename,
+		"rows" : str(rows)
+	}
+
+@app.post('/data/upload/test', tags=["upload"])
+async def upload_data_test(file: UploadFile = File(...), separator: str = ","):
+	"""
+	Allows the user to upload a csv file of test data to its corresponding table in raw schema.
+
+	The file must be structured like this, being the separator that the user wants:
+		
+		id,week,center_id,meal_id,checkout_price,base_price,emailer_for_promotion,homepage_featured
+
+		1,1,55,1885,136.83,152.29,0,0
+
+	Args:
+		
+		file (UploadFile, optional): The csv file with the data of the features of sales in order to insert into the table. Defaults to File(...).
+		
+		separator (str, optional): The separator of the csv file. Defaults to ",".
+
+	Raises:
+		
+		HTTPException: raised exception when method fails in insert procedure
+
+	Returns:
+		
+		filename (str): The name of the uploaded csv
+		
+		rows (str): Number of rows inserted into the table
+	"""
+
+	# Defining the schema
+	schema = {
+		'id' : int,
+		'week' : int,
+		'center_id' : int,
+		'meal_id' : int,
+		'checkout_price' : float,
+		'base_price' : float,
+		'emailer_for_promotion' : int,
+		'homepage_featured' : int
+	}
+
+	# Try to insert the csv file into the table
+	try:
+		rows = client.insert_csv_file_into_table(table_name="test", file=file, schema=schema, database="raw", separator=separator)
+	except:
+		raise HTTPException(status_code = 404, detail='There was an error when it tried to insert the csv in the file')
+
+	return {
+		"filename" : file.filename,
+		"rows" : str(rows)
+	}
+
+@app.post('/data/upload/train', tags=["upload"])
+async def upload_data_train(file: UploadFile = File(...), separator: str = ","):
+	"""
+	Allows the user to upload a csv file of train data to its corresponding table in raw schema.
+
+	The file must be structured like this, being the separator that the user wants:
+		
+		id,week,center_id,meal_id,checkout_price,base_price,emailer_for_promotion,homepage_featured,num_orders
+
+		1,1,55,1885,136.83,152.29,0,0,177
+
+	Args:
+		
+		file (UploadFile, optional): The csv file with the data of the historical sales in order to insert into the table. Defaults to File(...).
+		
+		separator (str, optional): The separator of the csv file. Defaults to ",". 
+
+	Raises:
+		
+		HTTPException: raised exception when method fails in insert procedure
+
+	Returns:
+		
+		filename (str): The name of the uploaded csv
+		
+		rows (str): Number of rows inserted into the table
+	"""
+
+	# Defining the schema
+	schema = {
+		'id' : int,
+		'week' : int,
+		'center_id' : int,
+		'meal_id' : int,
+		'checkout_price' : float,
+		'base_price' : float,
+		'emailer_for_promotion' : int,
+		'homepage_featured' : int,
+		'num_orders' : int
+	}
+
+	# Try to insert the csv file into the table
+	try:
+		rows = client.insert_csv_file_into_table(table_name="train", file=file, schema=schema, database="raw", separator=separator)
+	except:
+		raise HTTPException(status_code = 404, detail='There was an error when it tried to insert the csv in the file')
+
+	return {
+		"filename" : file.filename,
+		"rows" : str(rows)
 	}
