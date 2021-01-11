@@ -143,13 +143,13 @@ class ClickhouseClient(Client):
 
 		print(self.script_name + 'table ' + table_name + ' deleted')
 
-	def insert_csv_file_into_table(self, table_name, file, schema, database = 'default'):		
+	def insert_csv_file_into_table(self, table_name, file, schema, database = 'default', separator = ','):		
 		"""
 		Load a table in a Clickhouse server using a CSV file iterating over its rows
 
 		Args:
 			table_name (str) : the name of the table
-			file ([type]): file object of the CSV file
+			file (File): file object of the CSV file
 			schema (dict) : structure of the file, example:
 				{
 					"column_name_1" : int,
@@ -157,9 +157,21 @@ class ClickhouseClient(Client):
 					"column_name_3" : float,
 				}
 			database (str) : the name of the database where the table is going to be stored
+			separator (str, optional): [description]. Defaults to ",". The separator of the csv file
+		
+		Returns:
+			rows (int): Number of rows inserted into the table
 		"""
+		# Read csv file
+		df = pd.read_csv(file.file, sep=separator)
 
-		self.execute("INSERT INTO " + database + "." + table_name + " VALUES", self.iter_csv_file(file, schema))
+		# Check schema and cast every columns to the target type
+		df = df.astype(schema)
+
+		# Insert into Clickhouse table
+		client.insert_dataframe_into_table(table_name, database, df)
+		
+		return len(df)
 
 	def insert_dataframe_into_table(self, table_name, database, df):
 		"""

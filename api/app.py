@@ -164,44 +164,79 @@ async def refresh_prediction_data():
 	return {"message" : "Dataframe were updating"}
 
 @app.post('/data/upload/center', tags=["data"])
-async def upload_data_center(file: UploadFile = File(...), separator: str = ";"):
+async def upload_data_center(file: UploadFile = File(...), separator: str = ","):
 	"""
 	Allows the user to upload a csv file of center data to its corresponding table.
 
 	The file must be structured like this, being the separator that the user wants:
 		
-		center_id;city_code;region_code;center_type;op_area
-		
-		1;2;3;4;5
+		center_id,city_code,region_code,center_type,op_area
+
+		11,679,56,TYPE_A,3.7
 
 	Args:
 		file (UploadFile, optional): [description]. Defaults to File(...). The csv file with the data of the centers in order to insert into the table
-		separator (str, optional): [description]. Defaults to ";". The separator of the csv file
+		separator (str, optional): [description]. Defaults to ",". The separator of the csv file
 
 	Returns:
 		filename (str): The name of the uploaded csv
 		rows (int): Number of rows inserted into the table
 	"""
 
-	df = pd.read_csv(file.file, sep=separator)
+	# # Read csv file
+	# df = pd.read_csv(file.file, sep=separator)
 
-	df['center_id'] = pd.to_numeric(df['center_id'])
-	df['city_code'] = pd.to_numeric(df['city_code'])
-	df['region_code'] = pd.to_numeric(df['region_code'])
-	df['center_type'] = df['center_type'].astype(str)
-	df['op_area'] = pd.to_numeric(df['op_area'])
+	# # Cast its columns
+	# df['center_id'] = pd.to_numeric(df['center_id'])
+	# df['city_code'] = pd.to_numeric(df['city_code'])
+	# df['region_code'] = pd.to_numeric(df['region_code'])
+	# df['center_type'] = df['center_type'].astype(str)
+	# df['op_area'] = pd.to_numeric(df['op_area'])
 
-	client.insert_dataframe_into_table("center", "raw", df)
+	# # Insert into Clickhouse table
+	# client.insert_dataframe_into_table("center", "raw", df)
 
-	# schema = {
-	# 	"center_id": int,
-	# 	"city_code": int,
-	# 	"region_code": int,
-	# 	"center_type": str,
-	# 	"op_area": float
-	# }
+	schema = {
+		'center_id' : str,
+		'city_code' : str,
+		'region_code' : str,
+		'center_type' : str,
+		'op_area' : str
+	}
 
-	# client.insert_csv_file_into_table("center", file.file, schema, "raw")
+	client.insert_csv_file_into_table(table_name="center", file, schema, database="raw", separator=",")
+	return {
+		"filename" : file.filename,
+		"rows" : str(len(df))
+	}
+
+@app.post('/data/upload/meal', tags=["data"])
+async def upload_data_meal(file: UploadFile = File(...), separator: str = ","):
+	"""
+	Allows the user to upload a csv file of meal data to its corresponding table.
+
+	The file must be structured like this, being the separator that the user wants:
+		
+		meal_id,category,cuisine
+		
+		1885,Beverages,Thai
+
+	Args:
+		file (UploadFile, optional): [description]. Defaults to File(...). The csv file with the data of the centers in order to insert into the table
+		separator (str, optional): [description]. Defaults to ",". The separator of the csv file
+
+	Returns:
+		filename (str): The name of the uploaded csv
+		rows (str): Number of rows inserted into the table
+	"""
+
+	schema = {
+		'meal_id' : int,
+		'category' : str,
+		'cuisine' : str
+	}
+
+	client.insert_csv_file_into_table(table_name="center", file, schema, database="raw", separator=",")
 
 	return {
 		"filename" : file.filename,
