@@ -236,7 +236,10 @@ async def upload_data_meal(file: UploadFile = File(...), separator: str = ","):
 		'cuisine' : str
 	}
 
-	client.insert_csv_file_into_table(table_name="center", file=file, schema=schema, database="raw", separator=",")
+	try:
+		client.insert_csv_file_into_table(table_name="meal", file=file, schema=schema, database="raw", separator=",")
+	except:
+		raise HTTPException(status_code = 404, detail='There was an error when it tried to insert the csv in the file')
 
 	return {
 		"filename" : file.filename,
@@ -362,7 +365,7 @@ async def test_clickhouse():
 	df = client.query_dataframe('SELECT * FROM raw.meal LIMIT 10')
 
 	if (df.empty):
-		raise HTTPException(status_code = 404, detail='Error, there was an error when it tryed to connect to Clickhouse')
+		raise HTTPException(status_code = 404, detail='There was an error when it tried to connect to Clickhouse')
 	
 	return df.to_json(orient='records')
 
