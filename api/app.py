@@ -161,6 +161,36 @@ async def refresh_prediction_data():
 
 	return {"message" : "Dataframe were updating"}
 
+@app.post('/data/upload', tags=["data"])
+async def upload_data_center(table_name: str, database: str, file: UploadFile = File(...), schema : dict, separator: str = ","):
+	"""[summary]
+
+	Args:
+		table_name (str): the name of the table where is going to be saved the data
+		database (str): the name of the database where the table is located in
+		schema (dict): structure of the file, example:
+
+			{
+		
+				"column_name_1" : int,
+		
+				"column_name_2" : str,
+		
+				"column_name_3" : float,
+		
+			} 
+		
+		file (UploadFile, optional): [description]. Defaults to File(...). The csv file that it's wanted to be inserted into the table
+		separator (str, optional): [description]. Defaults to ",". The separator of the csv file
+
+	Raises:
+		HTTPException: raised exception when method fails in insert procedure
+
+	Returns:
+		filename (str): The name of the uploaded csv
+		rows (str): Number of rows inserted into the table
+	"""
+	
 @app.post('/data/upload/center', tags=["data"])
 async def upload_data_center(file: UploadFile = File(...), separator: str = ","):
 	"""
@@ -175,6 +205,9 @@ async def upload_data_center(file: UploadFile = File(...), separator: str = ",")
 	Args:
 		file (UploadFile, optional): [description]. Defaults to File(...). The csv file with the data of the centers in order to insert into the table
 		separator (str, optional): [description]. Defaults to ",". The separator of the csv file
+
+	Raises:
+		HTTPException: raised exception when method fails in insert procedure
 
 	Returns:
 		filename (str): The name of the uploaded csv
@@ -213,8 +246,11 @@ async def upload_data_meal(file: UploadFile = File(...), separator: str = ","):
 		1885,Beverages,Thai
 
 	Args:
-		file (UploadFile, optional): [description]. Defaults to File(...). The csv file with the data of the centers in order to insert into the table
+		file (UploadFile, optional): [description]. Defaults to File(...). The csv file with the data of the meals in order to insert into the table
 		separator (str, optional): [description]. Defaults to ",". The separator of the csv file
+
+	Raises:
+		HTTPException: raised exception when method fails in insert procedure
 
 	Returns:
 		filename (str): The name of the uploaded csv
@@ -239,6 +275,52 @@ async def upload_data_meal(file: UploadFile = File(...), separator: str = ","):
 		"rows" : str(rows)
 	}
 
+@app.post('/data/upload/test', tags=["data"])
+async def upload_data_test(file: UploadFile = File(...), separator: str = ","):
+	"""
+	Allows the user to upload a csv file of test data to its corresponding table.
+
+	The file must be structured like this, being the separator that the user wants:
+		
+		id,week,center_id,meal_id,checkout_price,base_price,emailer_for_promotion,homepage_featured
+
+		1,1,55,1885,136.83,152.29,0,0
+
+	Args:
+		file (UploadFile, optional): [description]. Defaults to File(...). The csv file with the data of the features of sales in order to insert into the table
+		separator (str, optional): [description]. Defaults to ",". The separator of the csv file
+
+	Raises:
+		HTTPException: raised exception when method fails in insert procedure
+
+	Returns:
+		filename (str): The name of the uploaded csv
+		rows (str): Number of rows inserted into the table
+	"""
+
+	# Defining the schema
+	schema = {
+		'id' : int,
+		'week' : int,
+		'center_id' : int,
+		'meal_id' : int,
+		'checkout_price' : float,
+		'base_price' : float,
+		'emailer_for_promotion' : int,
+		'homepage_featured' : int
+	}
+
+	# Try to insert the csv file into the table
+	try:
+		rows = client.insert_csv_file_into_table(table_name="test", file=file, schema=schema, database="raw", separator=",")
+	except:
+		raise HTTPException(status_code = 404, detail='There was an error when it tried to insert the csv in the file')
+
+	return {
+		"filename" : file.filename,
+		"rows" : str(rows)
+	}
+
 @app.post('/data/upload/train', tags=["data"])
 async def upload_data_train(file: UploadFile = File(...), separator: str = ","):
 	"""
@@ -251,8 +333,11 @@ async def upload_data_train(file: UploadFile = File(...), separator: str = ","):
 		1,1,55,1885,136.83,152.29,0,0,177
 
 	Args:
-		file (UploadFile, optional): [description]. Defaults to File(...). The csv file with the data of the centers in order to insert into the table
+		file (UploadFile, optional): [description]. Defaults to File(...). The csv file with the data of the historical sales in order to insert into the table
 		separator (str, optional): [description]. Defaults to ",". The separator of the csv file
+
+	Raises:
+		HTTPException: raised exception when method fails in insert procedure
 
 	Returns:
 		filename (str): The name of the uploaded csv
@@ -282,7 +367,6 @@ async def upload_data_train(file: UploadFile = File(...), separator: str = ","):
 		"filename" : file.filename,
 		"rows" : str(rows)
 	}
-
 
 # Prediction methods
 @app.get('/predict', response_model = List[schema.Prediction], tags=["prediction"])
