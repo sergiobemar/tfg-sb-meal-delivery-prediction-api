@@ -166,8 +166,11 @@ async def upload_data_from_csv(table_name: str, database: str, schema : dict, fi
 	"""[summary]
 
 	Args:
+		
 		table_name (str): the name of the table where is going to be saved the data
+		
 		database (str): the name of the database where the table is located in
+		
 		schema (dict): structure of the file, example:
 
 			{
@@ -181,6 +184,7 @@ async def upload_data_from_csv(table_name: str, database: str, schema : dict, fi
 			} 
 		
 		file (UploadFile, optional): [description]. Defaults to File(...). The csv file that it's wanted to be inserted into the table
+		
 		separator (str, optional): [description]. Defaults to ",". The separator of the csv file
 
 	Raises:
