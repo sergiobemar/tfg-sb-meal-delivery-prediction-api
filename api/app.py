@@ -233,7 +233,7 @@ async def upload_data_from_csv(table_name: str, database: str, schema_file : Upl
 		raise HTTPException(status_code = 404, detail='There was an error when it tried to insert the csv in the file')
 
 	return {
-		"filename" : file.filename,
+		"filename" : input_file.filename,
 		"rows" : str(rows)
 	}
 
