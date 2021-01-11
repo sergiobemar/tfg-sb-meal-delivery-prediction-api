@@ -39,8 +39,8 @@ tags_metadata = [
 ]
 
 app = FastAPI(
-	title = "Predicción de pedidos API",
-	description = "Una API para proveer la información así como los cálculos de predicción sobre los pedidos de un centro de reparto de comidas a domicilio.",
+	title = "Meal Orders Prediction API",
+	description = "This API provides the developer the information and also the prediction calculation about the delivery meal center.",
 	version = "2.0",
 	openapi_tags = tags_metadata
 ) 
@@ -162,6 +162,33 @@ async def refresh_prediction_data():
 		df_train = df_train_new.copy()
 
 	return {"message" : "Dataframe were updating"}
+
+@app.post('/data/upload/center', tags=["data"])
+async def upload_data_center(file: UploadFile = File(...), separator: str = ";"):
+	"""
+	Allows the user to upload a csv file of center data to its corresponding table.
+
+	The file must be structured like this, being the separator that the user wants:
+		center_id;city_code;region_code;center_type;op_area
+		1;2;3;4;5
+
+	Args:
+		file (UploadFile, optional): [description]. Defaults to File(...). The csv file with the data of the centers in order to insert into the table
+		separator (str, optional): [description]. Defaults to ";". The separator of the csv file
+
+	Returns:
+		filename (str): The name of the uploaded csv
+		rows (int): Number of rows inserted into the table
+	"""
+
+	df = pd.read_csv(file.file, sep=separator)
+
+	client.insert_dataframe_into_table("center", "raw", df)
+
+	return {
+		"filename" : file.filename,
+		"rows" : str(len(df))
+	}
 
 # Prediction methods
 @app.get('/predict', response_model = List[schema.Prediction], tags=["prediction"])
@@ -309,7 +336,7 @@ async def test_params(order : schema.OrderTrain):
 @app.post('/test_upload_file', tags=["test"])
 async def test_upload_file(file: UploadFile = File(...)):
 	"""
-	Check the functionality when it's needed to upload a file
+	Check the functionality when it's needed to upload a csv file
 
 	Args:
 		file (UploadFile, optional): The file that it's going to be uploaded. Defaults to File().
