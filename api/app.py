@@ -185,11 +185,11 @@ async def upload_data_center(file: UploadFile = File(...), separator: str = ";")
 
 	df = pd.read_csv(file.file, sep=separator)
 
-	df['center_id'] = df['center_id'].to_numeric()
-	df['city_code'] = df['city_code'].to_numeric()
-	df['region_code'] = df['region_code'].to_numeric()
+	df['center_id'] = pd.to_numeric(df['center_id'])
+	df['city_code'] = pd.to_numeric(df['city_code'])
+	df['region_code'] = pd.to_numeric(df['region_code'])
 	df['center_type'] = df['center_type'].astype(str)
-	df['op_area'] = df['op_area'].to_numeric()
+	df['op_area'] = pd.to_numeric(df['op_area'])
 
 	client.insert_dataframe_into_table("center", "raw", df)
 
