@@ -70,9 +70,11 @@ async def get_center(limit: int = 10):
 	Get original center data from Clickhouse
 
 	Args:
+		
 		limit (int, optional): set the limit of rows that user need. If this value is 0, it's returned whole dataframe. Defaults to 10.
 
 	Returns:
+		
 		List Center data: rows from center data
 	"""
 
@@ -93,9 +95,11 @@ async def get_meal(limit: int = 10):
 	Get original meal data from Clickhouse
 
 	Args:
+		
 		limit (int, optional): set the limit of rows that user need. If this value is 0, it's returned whole dataframe. Defaults to 10.
 
 	Returns:
+		
 		List Meal data: rows from meal data
 	"""
 
@@ -116,6 +120,7 @@ async def get_test_data():
 	Get a sample from test dataframe
 
 	Returns:
+		
 		List Test data: sample of test data
 	"""
 
@@ -130,6 +135,7 @@ async def get_train_data():
 	Get a sample from train dataframe
 
 	Returns:
+		
 		List Train data: sample of train data
 	"""
 
@@ -144,9 +150,11 @@ async def refresh_prediction_data():
 	Refresh the data from Clickhouse server updating train and test dataframes.
 
 	Raises:
+		
 		HTTPException: 404 error if API couldn't refresh the data from Clickhouse
 
 	Returns:
+		
 		Message (str): shows if the process was ok
 	"""
 
@@ -163,7 +171,8 @@ async def refresh_prediction_data():
 
 @app.post('/data/upload', tags=["data"])
 async def upload_data_from_csv(table_name: str, database: str, schema_file : UploadFile = File(...), input_file: UploadFile = File(...), separator: str = ","):
-	"""[summary]
+	"""
+	Uploads a specific csv file to the table which user wants, setting both the schema of the file and the database
 
 	Args:
 		
@@ -196,12 +205,12 @@ async def upload_data_from_csv(table_name: str, database: str, schema_file : Upl
 	"""
 
 	# Read the json file
-	data_json = json.load(file.file)
+	data_json = json.load(schema_file.file)
 
 	# Cast type strings to object type from json file
 	schema = dict()
 
-	for i, j in data.items():
+	for i, j in data_json.items():
 
 		# Column name
 		column_name = i
@@ -240,14 +249,19 @@ async def upload_data_center(file: UploadFile = File(...), separator: str = ",")
 		11,679,56,TYPE_A,3.7
 
 	Args:
+		
 		file (UploadFile, optional): The csv file with the data of the centers in order to insert into the table. Defaults to File(...). 
+		
 		separator (str, optional): The separator of the csv file. Defaults to ",".
 
 	Raises:
+		
 		HTTPException: raised exception when method fails in insert procedure
 
 	Returns:
+		
 		filename (str): The name of the uploaded csv
+		
 		rows (str): Number of rows inserted into the table
 	"""
 
@@ -283,14 +297,19 @@ async def upload_data_meal(file: UploadFile = File(...), separator: str = ","):
 		1885,Beverages,Thai
 
 	Args:
+		
 		file (UploadFile, optional): The csv file with the data of the meals in order to insert into the table. Defaults to File(...).
+		
 		separator (str, optional): The separator of the csv file. Defaults to ",".
 
 	Raises:
+		
 		HTTPException: raised exception when method fails in insert procedure
 
 	Returns:
+		
 		filename (str): The name of the uploaded csv
+		
 		rows (str): Number of rows inserted into the table
 	"""
 
@@ -324,14 +343,19 @@ async def upload_data_test(file: UploadFile = File(...), separator: str = ","):
 		1,1,55,1885,136.83,152.29,0,0
 
 	Args:
+		
 		file (UploadFile, optional): The csv file with the data of the features of sales in order to insert into the table. Defaults to File(...).
+		
 		separator (str, optional): The separator of the csv file. Defaults to ",".
 
 	Raises:
+		
 		HTTPException: raised exception when method fails in insert procedure
 
 	Returns:
+		
 		filename (str): The name of the uploaded csv
+		
 		rows (str): Number of rows inserted into the table
 	"""
 
@@ -370,14 +394,19 @@ async def upload_data_train(file: UploadFile = File(...), separator: str = ","):
 		1,1,55,1885,136.83,152.29,0,0,177
 
 	Args:
+		
 		file (UploadFile, optional): The csv file with the data of the historical sales in order to insert into the table. Defaults to File(...).
+		
 		separator (str, optional): The separator of the csv file. Defaults to ",". 
 
 	Raises:
+		
 		HTTPException: raised exception when method fails in insert procedure
 
 	Returns:
+		
 		filename (str): The name of the uploaded csv
+		
 		rows (str): Number of rows inserted into the table
 	"""
 
@@ -413,10 +442,13 @@ async def predict(center_id : int, meal_id : int):
 	In addition, so that the function managed to return the other fields of prediction data, besides the number of predicted orders, it's needed center and meal identifiers.
 
 	Args:
+		
 		center_id (int): identifier of the center to be predicted
+		
 		meal_id (int): identifier of the meal to be predicted
 
 	Rerturns:
+		
 		List Prediction data: number of orders by date in the following 10 weeks
 	"""
 
@@ -463,9 +495,11 @@ async def train(order : schema.OrderTrain):
 	When model is trained, it will be saved as Pickel in order to recover it when it was necessary to make a prediction.
 
 	Args:
+		
 		order (schema.OrderTrain): the center and meal identifier in order to select the historic using them as filter
 	
 	Rerturns:
+		
 		rmse (float): the error given by the trained model
 	"""
 	center_id = order.center_id
@@ -503,6 +537,7 @@ async def test():
 	Checks if the API is running correctly
 
 	Returns:
+		
 		message (str): shows a message
 	"""
 	return {
@@ -515,9 +550,11 @@ async def test_clickhouse():
 	Test if the connection with Clickhouse is made. If not, this method raises an error
 	
 	Raises:
+		
 		HTTPException: 404 error if the connection wan't made
 
 	Returns:
+		
 		df (dict): sample of rows got from a Clickhouse table
 	"""
 
@@ -534,11 +571,15 @@ async def test_params(order : schema.OrderTrain):
 	Check if params are being received correctly
 
 	Args:
+		
 		order (schema.OrderTrain): the center and meal identifier in order to select the historic using them as filter
 
 	Returns:
+		
 		message (str): shows a simple test string
+		
 		center_id (str): center identifier given by the input parameter order
+		
 		meal_id (str): meal identifier given by the input parameter order
 	"""
 
