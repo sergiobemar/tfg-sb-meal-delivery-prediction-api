@@ -1,6 +1,7 @@
 from clickhouse_driver import Client
 from csv import DictReader
 
+import os
 import pandas as pd
 
 class ClickhouseClient(Client):
@@ -17,6 +18,10 @@ class ClickhouseClient(Client):
 			database (str): which is the database where is going to be connected
 		"""
 
+		# Set script name
+		self.script_name = os.path.basename(__file__) + ": "
+
+		# Create connection
 		Client.__init__(
 			self,
 			host = host,
@@ -28,6 +33,8 @@ class ClickhouseClient(Client):
 			compression = True,
 			settings = {'use_numpy' : True}
 		)
+
+		print(self.script_name + "connection to " + host + " done")
 
 	def create_database(self, database, if_not_exists = True):
 		"""
@@ -45,6 +52,8 @@ class ClickhouseClient(Client):
 			sentence = 'CREATE DATABASE ' + database
 
 		self.execute(sentence)
+
+		print(self.script_name + "database " + database + " created")
 
 	def create_table(self, table_name, database, fields, if_not_exists = True):
 		"""
@@ -81,6 +90,8 @@ class ClickhouseClient(Client):
 
 		self.execute(sentence)
 
+		print(self.script_name + "table " + table_name + " created")
+
 	def drop_database(self, database, if_exists = True):
 		"""
 		Delete a specific database, in addition the flag "if_exists" allows to avoid the error due to existance of the database
@@ -103,6 +114,8 @@ class ClickhouseClient(Client):
 
 		# Execute sentence
 		self.execute(sentence)
+
+		print(self.script_name + "database " + database + " created")
 
 	def drop_table(self, table_name, database, if_exists = True):
 		"""
@@ -127,6 +140,26 @@ class ClickhouseClient(Client):
 
 		# Execute sentence
 		self.execute(sentence)
+
+		print(self.script_name + 'table ' + table_name + ' deleted')
+
+	def insert_csv_file_into_table(self, table_name, file, schema, database = 'default'):		
+		"""
+		Load a table in a Clickhouse server using a CSV file iterating over its rows
+
+		Args:
+			table_name (str) : the name of the table
+			file ([type]): file object of the CSV file
+			schema (dict) : structure of the file, example:
+				{
+					"column_name_1" : int,
+					"column_name_2" : str,
+					"column_name_3" : float,
+				}
+			database (str) : the name of the database where the table is going to be stored
+		"""
+
+		self.execute("INSERT INTO " + database + "." + table_name + " VALUES", self.iter_csv_file(file, schema))
 
 	def insert_dataframe_into_table(self, table_name, database, df):
 		"""
@@ -156,6 +189,21 @@ class ClickhouseClient(Client):
 			reader = DictReader(f)
 			for line in reader:
 				yield {k: (schema[k](v) if k in schema else v) for k, v in line.items()}
+	
+	def iter_csv_file(self, file, schema):
+		'''
+		Iter over csv data checking its structure using the schema
+
+		Args:
+			file (File): the file which is going to be read
+			schema (dict): the schema of the input csv file
+
+		Returns: every row of the file iteratively
+		'''
+
+		reader = DictReader(file)
+		for line in reader:
+			yield {k: (schema[k](v) if k in schema else v) for k, v in line.items()}
 
 	def load_table_from_csv(self, table_name, file_path, schema, database = 'default'):
 		'''
