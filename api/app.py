@@ -204,10 +204,10 @@ async def upload_data_center(file: UploadFile = File(...), separator: str = ",")
 		'op_area' : float
 	}
 
-	client.insert_csv_file_into_table(table_name="center", file=file, schema=schema, database="raw", separator=",")
+	rows = client.insert_csv_file_into_table(table_name="center", file=file, schema=schema, database="raw", separator=",")
 	return {
 		"filename" : file.filename,
-		"rows" : str(len(df))
+		"rows" : str(rows)
 	}
 
 @app.post('/data/upload/meal', tags=["data"])
@@ -236,11 +236,11 @@ async def upload_data_meal(file: UploadFile = File(...), separator: str = ","):
 		'cuisine' : str
 	}
 
-	client.insert_csv_file_into_table(table_name="center", file=file, schema=schema, database="raw", separator=",")
+	rows = client.insert_csv_file_into_table(table_name="center", file=file, schema=schema, database="raw", separator=",")
 
 	return {
 		"filename" : file.filename,
-		"rows" : str(len(df))
+		"rows" : str(rows)
 	}
 
 # Prediction methods
