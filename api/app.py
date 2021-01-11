@@ -180,22 +180,10 @@ async def upload_data_center(file: UploadFile = File(...), separator: str = ",")
 
 	Returns:
 		filename (str): The name of the uploaded csv
-		rows (int): Number of rows inserted into the table
+		rows (str): Number of rows inserted into the table
 	"""
 
-	# # Read csv file
-	# df = pd.read_csv(file.file, sep=separator)
-
-	# # Cast its columns
-	# df['center_id'] = pd.to_numeric(df['center_id'])
-	# df['city_code'] = pd.to_numeric(df['city_code'])
-	# df['region_code'] = pd.to_numeric(df['region_code'])
-	# df['center_type'] = df['center_type'].astype(str)
-	# df['op_area'] = pd.to_numeric(df['op_area'])
-
-	# # Insert into Clickhouse table
-	# client.insert_dataframe_into_table("center", "raw", df)
-
+	# Defining the schema
 	schema = {
 		'center_id' : int,
 		'city_code' : int,
@@ -204,10 +192,15 @@ async def upload_data_center(file: UploadFile = File(...), separator: str = ",")
 		'op_area' : float
 	}
 
-	client.insert_csv_file_into_table(table_name="center", file=file, schema=schema, database="raw", separator=",")
+	# Try to insert the csv file into the table
+	try:
+		rows = client.insert_csv_file_into_table(table_name="center", file=file, schema=schema, database="raw", separator=",")
+	except:
+		raise HTTPException(status_code = 404, detail='There was an error when it tried to insert the csv in the file')
+
 	return {
 		"filename" : file.filename,
-		"rows" : str(len(df))
+		"rows" : str(rows)
 	}
 
 @app.post('/data/upload/meal', tags=["data"])
@@ -230,20 +223,22 @@ async def upload_data_meal(file: UploadFile = File(...), separator: str = ","):
 		rows (str): Number of rows inserted into the table
 	"""
 
+	# Defining the schema
 	schema = {
 		'meal_id' : int,
 		'category' : str,
 		'cuisine' : str
 	}
 
+	# Try to insert the csv file into the table
 	try:
-		client.insert_csv_file_into_table(table_name="meal", file=file, schema=schema, database="raw", separator=",")
+		rows = client.insert_csv_file_into_table(table_name="meal", file=file, schema=schema, database="raw", separator=",")
 	except:
 		raise HTTPException(status_code = 404, detail='There was an error when it tried to insert the csv in the file')
 
 	return {
 		"filename" : file.filename,
-		"rows" : str(len(df))
+		"rows" : str(rows)
 	}
 
 # Prediction methods
