@@ -169,7 +169,7 @@ class ClickhouseClient(Client):
 		df = df.astype(schema)
 
 		# Insert into Clickhouse table
-		client.insert_dataframe_into_table(table_name, database, df)
+		self.insert_dataframe_into_table(table_name, database, df)
 		
 		return len(df)
 
