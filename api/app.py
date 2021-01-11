@@ -6,7 +6,7 @@ import pandas as pd
 import sys
 
 from datetime import timedelta
-from fastapi import FastAPI, HTTPException, UploadFile
+from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.responses import JSONResponse
 from typing import List
 
@@ -307,7 +307,7 @@ async def test_params(order : schema.OrderTrain):
 	}
 
 @app.post('/test_upload_file', tags=["test"])
-async def test_upload_file(file: UploadFile = File()):
+async def test_upload_file(file: UploadFile = File(...)):
 	"""
 	Check the functionality when it's needed to upload a file
 
@@ -315,6 +315,9 @@ async def test_upload_file(file: UploadFile = File()):
 		file (UploadFile, optional): The file that it's going to be uploaded. Defaults to File().
 	"""
 
-	dataframe = pd.read_csv(csv_file.file)
+	dataframe = pd.read_csv(file.file)
 
-	return {"filename": file.filename}
+	return {
+		"filename" : file.filename,
+		"rows" : str(len(dataframe))
+	}
