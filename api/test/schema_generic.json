@@ -1,0 +1,7 @@
+{
+	"center_id": "int",
+	"city_code": "int",
+	"region_code": "int",
+	"center_type": "str",
+	"op_area": "float"
+}
