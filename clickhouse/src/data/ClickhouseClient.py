@@ -115,7 +115,7 @@ class ClickhouseClient(Client):
 		# Execute sentence
 		self.execute(sentence)
 
-		print(self.script_name + "database " + database + " created")
+		print(self.script_name + "database " + database + " deleted")
 
 	def drop_table(self, table_name, database, if_exists = True):
 		"""
