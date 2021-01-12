@@ -45,6 +45,24 @@
 			]
 		},
 		{
+			"table_name" : "center_location",
+			"path" : "./api/data/raw/center_location.csv",
+			"schema" : [
+				{
+					"name" : "center_id",
+					"type" : "Int64"
+				},
+				{
+					"name" : "city",
+					"type" : "String"
+				},
+				{
+					"name" : "region",
+					"type" : "String"
+				}
+			]
+		},
+		{
 			"table_name" : "train",
 			"path" : "./api/data/raw/train.csv",
 			"schema" : [

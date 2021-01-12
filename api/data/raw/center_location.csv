@@ -1,0 +1,80 @@
+center_id,city_code,region_code,city,region,,,,
+11,679,56,Almería,España,,,,
+13,590,56,Cádiz,España,,center_id,city,region
+124,590,56,Cádiz,España,,11,Almería,España
+66,648,34,Annecy,Francia,,13,Cádiz,España
+94,632,34,Arles,Francia,,124,Cádiz,España
+64,553,77,Aguascalientes,México,,66,Annecy,Francia
+129,593,77,Ensenada,México,,94,Arles,Francia
+139,693,34,Aviñón,Francia,,64,Aguascalientes,México
+88,526,34,Besanzón,Francia,,129,Ensenada,México
+143,562,77,Mexicali,México,,139,Aviñón,Francia
+101,699,85,Bogotá,Colombia,,88,Besanzón,Francia
+86,699,85,Bogotá,Colombia,,143,Mexicali,México
+32,526,34,Besanzón,Francia,,101,Bogotá,Colombia
+149,478,77,Tijuana,México,,86,Bogotá,Colombia
+152,576,34,Béziers,Francia,,32,Besanzón,Francia
+92,526,34,Besanzón,Francia,,149,Tijuana,México
+27,713,85,Cali,Colombia,,152,Béziers,Francia
+14,654,56,Córdoba,España,,92,Besanzón,Francia
+26,515,77,La Paz,México,,27,Cali,Colombia
+104,647,56,Granada,España,,14,Córdoba,España
+77,676,34,Brest,Francia,,26,La Paz,México
+23,698,23,Oporto,Portugal,,104,Granada,España
+97,628,77,Los Cabos,México,,77,Brest,Francia
+146,526,34,Besanzón,Francia,,23,Oporto,Portugal
+113,680,77,Campeche,México,,97,Los Cabos,México
+145,620,77,Ciudad del Carmen,México,,146,Besanzón,Francia
+80,604,56,Huelva,España,,113,Campeche,México
+55,647,56,Granada,España,,145,Ciudad del Carmen,México
+186,649,34,Burdeos,Francia,,80,Huelva,España
+99,596,71,Buenos Aires,Argentina,,55,Granada,España
+91,590,56,Cádiz,España,,186,Burdeos,Francia
+20,522,56,Jaén,España,,99,Buenos Aires,Argentina
+106,675,34,Caen,Francia,,91,Cádiz,España
+81,526,34,Besanzón,Francia,,20,Jaén,España
+73,576,34,Béziers,Francia,,106,Caen,Francia
+29,526,34,Besanzón,Francia,,81,Besanzón,Francia
+43,590,56,Cádiz,España,,73,Béziers,Francia
+102,593,77,Ensenada,México,,29,Besanzón,Francia
+61,473,77,Saltillo,México,,43,Cádiz,España
+50,556,77,Guadalajara,México,,102,Ensenada,México
+83,659,77,La Laguna,México,,61,Saltillo,México
+57,541,77,Piedras Negras,México,,50,Guadalajara,México
+126,577,56,Málaga,España,,83,La Laguna,México
+177,683,56,Sevilla,España,,57,Piedras Negras,México
+67,638,56,Huesca,España,,126,Málaga,España
+174,700,56,Teruel,España,,177,Sevilla,España
+59,456,56,Zaragoza,España,,67,Huesca,España
+58,695,77,Tecomán,México,,174,Teruel,España
+65,602,34,Cannes,Francia,,59,Zaragoza,España
+39,526,34,Besanzón,Francia,,58,Tecomán,México
+132,522,56,Jaén,España,,65,Cannes,Francia
+89,703,56,Ávila,España,,39,Besanzón,Francia
+162,526,34,Besanzón,Francia,,132,Jaén,España
+75,651,77,Celaya,México,,89,Ávila,España
+72,638,56,Huesca,España,,162,Besanzón,Francia
+41,590,56,Cádiz,España,,75,Celaya,México
+10,590,56,Cádiz,España,,72,Huesca,España
+110,485,77,Guanajuato,México,,41,Cádiz,España
+52,685,56,Burgos,España,,10,Cádiz,España
+93,461,34,Carcassonne,Francia,,110,Guanajuato,México
+74,702,35,Roma,Italia,,52,Burgos,España
+34,615,34,Clermont Ferrand,Francia,,93,Carcassonne,Francia
+137,590,56,Cádiz,España,,74,Roma,Italia
+153,590,56,Cádiz,España,,34,Clermont Ferrand,Francia
+24,614,85,Medellín,Colombia,,137,Cádiz,España
+109,599,56,León,España,,153,Cádiz,España
+108,579,56,Palencia,España,,24,Medellín,Colombia
+36,517,56,Salamanca,España,,109,León,España
+157,609,93,Lima,Perú,,108,Palencia,España
+17,517,56,Salamanca,España,,36,Salamanca,España
+161,658,34,Collioure,Francia,,157,Lima,Perú
+42,561,77,Irapuato,México,,17,Salamanca,España
+53,590,56,Cádiz,España,,161,Collioure,Francia
+30,604,56,Huelva,España,,42,Irapuato,México
+76,614,85,Medellín,Colombia,,53,Cádiz,España
+68,676,34,Brest,Francia,,30,Huelva,España
+51,638,56,Huesca,España,,76,Medellín,Colombia
+,,,,,,68,Brest,Francia
+,,,,,,51,Huesca,España
