@@ -63,6 +63,20 @@
 			]
 		},
 		{
+			"table_name" : "meal_name",
+			"path" : "./api/data/raw/meal_name.csv",
+			"schema" : [
+				{
+					"name" : "meal_id",
+					"type" : "Int64"
+				},
+				{
+					"name" : "name",
+					"type" : "String"
+				}
+			]
+		},
+		{
 			"table_name" : "train",
 			"path" : "./api/data/raw/train.csv",
 			"schema" : [

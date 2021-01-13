@@ -17,7 +17,7 @@
 - [11. Configure Docker Compose file](#11-configure-docker-compose-file)
 - [12. Test docker-compose](#12-test-docker-compose)
 
-### 1. Install components for the server
+## 1. Install components for the server
 
 For this server it's used a Ubuntu machine v18.04 LTS with 2 CPUs and 4 GB of memory, besides its estimated cost is $27,31 in europe-west1 region, if machine was always on.
 
@@ -28,7 +28,7 @@ sudo apt-get install bzip2 libxml2-dev libsm6 libxrender1 libfontconfig1 git
 sudo apt-get install python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools
 sudo apt install python3-venv
 ```
-### 2. Set SSH keys in GitHub and clone repository
+## 2. Set SSH keys in GitHub and clone repository
 
 ```
 ssh-keygen -t rsa -b 4096 -C "youremail@email.com"
@@ -44,7 +44,7 @@ git config --global user.name "Your Name"
 git clone git@github.com:sergiobemar/tfg-sb-meal-delivery-prediction-api.git
 ```
 
-### 3. Activate Python virtual environment
+## 3. Activate Python virtual environment
 
 ```
 cd tfg-sb-meal-delivery-prediction-api/
@@ -54,7 +54,7 @@ python3 -m venv env
 source env/bin/activate
 ```
 
-### 4. Install libraries for the first time
+## 4. Install libraries for the first time
 
 ```
 pip3 install cmake wheel
@@ -64,7 +64,7 @@ pip3 install joblib numpy pandas xgboost
 
 ```
 
-### 5. Test the API with Uvicorn
+## 5. Test the API with Uvicorn
 
 In order to test the API, you can run it in your local machine usign ```Uvicorn```.
 
@@ -80,7 +80,7 @@ The parameters used are the following:
 + ```--reload```: Restart workers when code changes.
 + ```-workers 3```: Use multiple worker processes.
 
-### 6. Configure Gunicorn
+## 6. Configure Gunicorn
 
 In order to keep cleaned and sorted the repository, it's changed the structure saving everything created before, all regarding to model and preprocessing scripts besides the source, in a subfolder named as *api*.
 
@@ -119,7 +119,7 @@ if __name__ == "__main__":
 
 For more info, you can see it in [Uvicorn website](https://www.uvicorn.org/deployment/#running-programmatically).
 
-### 7. Setting up the API in Docker
+## 7. Setting up the API in Docker
 
 Create an empty ```__init__.py``` in ```api/``` and create ```requirements.txt```.
 
@@ -150,7 +150,7 @@ COPY .credentials /.credentials
 CMD ["gunicorn", "-w", "3", "-b", "0.0.0.0:5000", "-t", "360", "--reload", "api.app:app", "-k", "uvicorn.workers.UvicornWorker"]
 ```
 
-### 8. Add the Nginx container
+## 8. Add the Nginx container
 
 ```
 tfg-sb-meal-delivery-prediction-api
@@ -197,7 +197,7 @@ RUN rm /etc/nginx/nginx.conf
 COPY nginx.conf /etc/nginx/
 ```
 
-### 9. Install Docker
+## 9. Install Docker
 
 To install Docker it's possible following [this tutorial](https://www.digitalocean.com/community/tutorials/como-instalar-y-usar-docker-en-ubuntu-18-04-1-es):
 
@@ -232,7 +232,7 @@ After that, you can check that your user is in Docker group.
 id -nG
 ```
 
-### 10. Install Docker Compose
+## 10. Install Docker Compose
 
 It's used [docker docs web](https://docs.docker.com/compose/install/) to follow the installation steps.
 
@@ -247,7 +247,7 @@ sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 ```
 
-### 11. Configure Docker Compose file
+## 11. Configure Docker Compose file
 
 ```
 tfg-sb-meal-delivery-prediction-api
@@ -316,7 +316,7 @@ The containers launched by ```docker-compose``` would be the following:
 + ```nginx``` : builds Nginx proxy using its *[Dockerfile](../nginx/Dockerfile)* and launch it. In addition, it redirects the exposed port to 80.
 + ```clickhouse``` : launches Clickhouse from the official image and opens the ports 9001 in order to allow the clients to connect and 8123 for http connections, which will serve to test the database.
 
-### 12. Test docker-compose
+## 12. Test docker-compose
 
 It's the end of the configuration, if the last steps are ok, you can try to build the docker file using *docker-compose* which creates an image of the three containers, one for nginx, other for gunicorn and the last for Clickhouse. When launch the command ```docker-compose up```, these containers will be up and you can try now to make some request to the API.
 
