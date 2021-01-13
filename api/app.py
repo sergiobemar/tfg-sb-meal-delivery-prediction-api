@@ -507,8 +507,8 @@ async def upload_data_meal(file: UploadFile = File(...), separator: str = ","):
 		"rows" : str(rows)
 	}
 
-@app.post('/data/upload/test', tags=["upload"])
-async def upload_data_test(file: UploadFile = File(...), separator: str = ","):
+@app.post('/data/upload/predict', tags=["upload"])
+async def upload_data_predict(file: UploadFile = File(...), separator: str = ","):
 	"""
 	Allows the user to upload a csv file of test data to its corresponding table in raw schema.
 
