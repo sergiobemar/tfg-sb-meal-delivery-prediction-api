@@ -43,7 +43,7 @@ Generated using the following command ```tree . -I 'env'```
 
 To run this API server now you can try to build the docker file using *docker-compose* which creates an image of the two containers, one for nginx and the other for gunicorn. When launch the command ```docker-compose up```, these containers will be up and you can try now to make some request to the API.
 
-For a detailed information [you can visit this guide](https://github.com/sergiobemar/tfg-sb-meal-delivery-prediction-api/blob/master/config-machine.md) created in order to orient the developer in the deployment.
+For a detailed information [you can visit this guide](https://github.com/sergiobemar/tfg-sb-meal-delivery-prediction-api/blob/master/docs/config-machine.md) created in order to orient the developer in the deployment.
 
 ```
 docker-compose build
